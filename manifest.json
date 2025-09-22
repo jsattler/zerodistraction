@@ -12,19 +12,19 @@
   ],
   "background": {
     "scripts": [
-      "pattern-matcher.js",
-      "formatters.js",
-      "dom-utils.js",
-      "misc-utils.js",
-      "storage.js",
-      "timer.js",
+      "shared/pattern-matcher.js",
+      "shared/formatters.js",
+      "shared/dom-utils.js",
+      "shared/misc-utils.js",
+      "shared/storage.js",
+      "shared/timer.js",
       "background.js"
     ],
     "persistent": true
   },
   "browser_action": {
     "default_title": "ZeroDistraction",
-    "default_popup": "popup.html",
+    "default_popup": "popup/popup.html",
     "default_icon": {
       "32": "icons/blob.svg",
       "64": "icons/blob.svg",
@@ -32,7 +32,7 @@
     }
   },
   "options_ui": {
-    "page": "options.html",
+    "page": "options/options.html",
     "open_in_tab": true
   },
   "icons": {
