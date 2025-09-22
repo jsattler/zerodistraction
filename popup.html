@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Popup-specific styles */
+    body {
+      width: 320px;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    .timer-section {
+      margin-bottom: 20px;
+    }
+
+    .options-link {
+      text-align: center;
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-section">
+    <div class="timer-display" id="timer-display">00:30:00</div>
+    <div class="slider-container">
+      <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
+      <div class="slider-labels">
+        <span>0m</span>
+        <span>2h</span>
+        <span>4h</span>
+        <span>6h</span>
+        <span>8h</span>
+      </div>
+    </div>
+    <div class="progress-bar" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <button class="start-stop-btn start-btn btn btn-primary btn-full" id="start-stop-btn">Start</button>
+  </div>
+
+  <div class="options-link">
+    <a href="#" id="options-link">Options</a>
+  </div>
+
+  <script src="pattern-matcher.js"></script>
+  <script src="formatters.js"></script>
+  <script src="dom-utils.js"></script>
+  <script src="misc-utils.js"></script>
+  <script src="storage.js"></script>
+  <script src="timer.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

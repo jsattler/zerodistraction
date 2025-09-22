@@ -1,0 +1,49 @@
+{
+  "manifest_version": 2,
+  "name": "ZeroDistraction",
+  "version": "1.0.0",
+  "description": "Stay focused by blocking distracting websites. Ships with great defaults - no configuration required.",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "storage",
+    "activeTab",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "pattern-matcher.js",
+      "formatters.js",
+      "dom-utils.js",
+      "misc-utils.js",
+      "storage.js",
+      "timer.js",
+      "background.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_title": "ZeroDistraction",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "32": "icons/blob.svg",
+      "64": "icons/blob.svg",
+      "96": "icons/blob.svg"
+    }
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "icons": {
+    "32": "icons/blob.svg",
+    "64": "icons/blob.svg",
+    "96": "icons/blob.svg"
+  },
+  "web_accessible_resources": [
+    "blocklists/social.json",
+    "blocklists/news.json",
+    "blocklists/entertainment.json",
+    "blocked.html"
+  ]
+}

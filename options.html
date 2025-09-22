@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="dark light">
+  <title>Zero Distraction Options</title>
+  <link rel="icon" type="image/svg+xml" href="icons/blob.svg">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      padding: 40px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin: 0 0 8px 0;
+    }
+
+    .exceptions-input {
+      width: 100%;
+    }
+
+    .stop-btn {
+      width: 50%;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .timer-control {
+      text-align: center;
+      margin-top: 24px;
+    }
+
+    .timer-display {
+      font-size: 24px;
+      font-weight: 300;
+      margin-bottom: 16px;
+    }
+
+    .slider-container {
+      margin-bottom: 16px;
+    }
+
+    .progress-bar {
+      margin-bottom: 16px;
+    }
+
+    .external-link {
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 14px;
+      margin-left: 8px;
+      padding: 2px 4px;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+
+    .external-link:hover {
+      color: #004499;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="section">
+    <div class="section-title">Distraction Presets</div>
+    <div class="blocklist-item">
+      <input type="checkbox" id="social-checkbox" checked>
+      <label for="social-checkbox">Social Media</label>
+      <a href="blocklists/social.json" target="_blank" class="external-link" title="View Social Media blocklist">View Preset</a>
+    </div>
+    <div class="blocklist-item">
+      <input type="checkbox" id="news-checkbox" checked>
+      <label for="news-checkbox">News Sites</label>
+      <a href="blocklists/news.json" target="_blank" class="external-link" title="View News Sites blocklist">View Preset</a>
+    </div>
+    <div class="blocklist-item">
+      <input type="checkbox" id="entertainment-checkbox" checked>
+      <label for="entertainment-checkbox">Entertainment</label>
+      <a href="blocklists/entertainment.json" target="_blank" class="external-link" title="View Entertainment blocklist">View Preset</a>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title-with-tooltip">
+      Additional URLs
+      <div class="tooltip-container">
+        <button class="tooltip-btn" type="button">?</button>
+        <div class="tooltip-text">
+          Enter WebExtension Match patterns (one per line) that should be blocked in addition to the presets above.
+          Format: &lt;scheme&gt;://&lt;host&gt;&lt;path&gt;. Examples: *://*.example.com/*, https://site.com/*, *://*/path/*
+        </div>
+      </div>
+    </div>
+    <textarea
+      class="exceptions-input"
+      id="additional-urls-input"
+      placeholder="*://*.reddit.com/*&#10;*://*.twitter.com/*&#10;https://distracting-site.com/path/*"
+    ></textarea>
+  </div>
+
+  <div class="section">
+    <div class="section-title-with-tooltip">
+      Exceptions
+      <div class="tooltip-container">
+        <button class="tooltip-btn" type="button">?</button>
+        <div class="tooltip-text">
+          Enter WebExtension Match patterns (one per line) that should not be blocked, even if they match the blocklists above.
+          Format: &lt;scheme&gt;://&lt;host&gt;&lt;path&gt;. Examples: *://*.example.com/*, https://site.com/*, *://*/path/*
+        </div>
+      </div>
+    </div>
+    <textarea
+      class="exceptions-input"
+      id="exceptions-input"
+      placeholder="*://*.work.facebook.com/*&#10;https://news.ycombinator.com/jobs*&#10;*://*.work-domain.com/*"
+    ></textarea>
+  </div>
+
+  <div class="timer-control" id="timer-control">
+    <div class="timer-display" id="timer-display">00:30:00</div>
+    <div class="slider-container" style="display: none;">
+      <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
+      <div class="slider-labels">
+        <span>0m</span>
+        <span>2h</span>
+        <span>4h</span>
+        <span>6h</span>
+        <span>8h</span>
+      </div>
+    </div>
+    <div class="progress-bar" id="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
+    <button class="stop-btn btn btn-danger" id="stop-btn">HELP, I NEED DOPAMINE!</button>
+  </div>
+
+  <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
+    <div style="display: flex; align-items: center; gap: 15px; justify-content: center; margin-bottom: 8px;">
+      <a href="https://github.com/jsattler/zerodistraction" target="_blank"><img src="icons/github-mark.svg" alt="GitHub" style="height: 30px; width: 30px;" ></a>
+      <a href="https://www.buymeacoffee.com/jsattler" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 144px !important;" ></a>
+    </div>
+    <div style="font-size: 14px; color: black;">Made with ❤️ in 🇪🇺</div>
+  </div>
+
+  <script src="pattern-matcher.js"></script>
+  <script src="formatters.js"></script>
+  <script src="dom-utils.js"></script>
+  <script src="misc-utils.js"></script>
+  <script src="storage.js"></script>
+  <script src="timer.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

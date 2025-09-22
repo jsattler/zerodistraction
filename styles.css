@@ -1,0 +1,390 @@
+/* Shared styles for DistractionBlock extension */
+
+/* Base styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: white;
+  color: black;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 300;
+  color: black;
+}
+
+/* Common container styles */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section {
+  background: white;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: black;
+  font-size: 16px;
+}
+
+/* Timer display styles */
+.timer-display {
+  font-size: 3em;
+  font-weight: 200;
+  color: black;
+  text-align: center;
+  margin: 20px 0;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.05em;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+.timer-display.large {
+  font-size: 5em;
+  letter-spacing: 0.1em;
+}
+
+.timer-display.medium {
+  font-size: 24px;
+  font-weight: 300;
+}
+
+/* Progress bar styles */
+.progress-bar {
+  width: 100%;
+  height: 2px;
+  background: #ccc;
+  border-radius: 1px;
+  margin: 20px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: black;
+  border-radius: 1px;
+  transition: width 0.3s ease;
+  width: 0%;
+}
+
+/* Button styles */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary {
+  background: black;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #171717;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #991b1b;
+}
+
+.btn-full {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Form elements */
+input[type="checkbox"] {
+  accent-color: black;
+  margin-right: 12px;
+}
+
+label {
+  cursor: pointer;
+  color: black;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border: 1px solid black;
+  border-radius: 6px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  resize: vertical;
+  box-sizing: border-box;
+  background: white;
+  color: black;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: black;
+}
+
+/* Slider styles */
+.slider-container {
+  margin-bottom: 12px;
+}
+
+.duration-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 3px;
+  background: #ccc;
+  outline: none;
+  cursor: pointer;
+}
+
+.duration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+}
+
+.duration-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: black;
+  cursor: pointer;
+  border: none;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: black;
+  margin-top: 4px;
+}
+
+/* Checkbox list items */
+.blocklist-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.blocklist-item label {
+  flex: 1;
+}
+
+/* Help text */
+.help-text {
+  font-size: 12px;
+  color: black;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Links */
+a {
+  color: black;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Status indicators */
+.status {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: 500;
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+/* Responsive helpers */
+@media (max-width: 480px) {
+  .container {
+    padding: 15px;
+  }
+
+  .timer-display {
+    font-size: 2.5em;
+  }
+
+  .timer-display.large {
+    font-size: 4em;
+  }
+
+  .tooltip-text {
+    max-width: 280px;
+    left: 0;
+    transform: translateY(-100%);
+    font-size: 11px;
+  }
+
+  .tooltip-text::after {
+    left: 20px;
+    transform: none;
+  }
+}
+
+/* Tooltip styles */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-btn {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  margin-left: 6px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.tooltip-btn:hover {
+  background: #f5f5f5;
+  border-color: #999;
+  color: #333;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100%);
+  background: #333;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: normal;
+  width: 480px;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #333;
+}
+
+.tooltip-btn:hover + .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.section-title-with-tooltip {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: black;
+  font-size: 16px;
+}
+
+/* Utility classes */
+.text-center {
+  text-align: center;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.mb-12 {
+  margin-bottom: 12px;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
