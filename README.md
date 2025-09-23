@@ -67,6 +67,13 @@ ZeroDistraction respects your privacy and protects your data:
 * **No external connections**: The extension never sends any information to external servers or third parties
 * **Local storage only**: All your settings and preferences remain on your device
 
+## Disclaimer
+
+I'm not an expert in web technologies and heavily relied on Claude to create this extension.
+There are no tests yet and probably a lot of bugs. 
+I just wanted something working, in a short period of time.
+Next step is to make it nice and clean and add some tests.
+
 ## Contributing
 
 Contributions are welcome! Please open an issue first to discuss what you would like to change before submitting a pull request.
