@@ -29,6 +29,16 @@ It's about creating intentional breaks from distraction when you need to get thi
 * Configure an allowlist of URLs that remain accessible even during focus sessions
 * Timer runs in the background - no need to keep the extension popup open
 
+## Installation
+
+The easiest way is to [navigate to the extension page on addons.mozilla.org and click on **Add to Firefox**.](https://addons.mozilla.org/en-US/firefox/addon/zerodistraction/)
+
+Alternatively, you can downlaod and manually install the extension.
+
+* [Navigate to the Releases.](https://github.com/jsattler/zerodistraction/releases)
+* In the Release Assets, download the `zerodistraction.zip`.
+* [Follow the instructions to manually install an extension.](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing)
+
 ## URL Pattern Matching
 
 ZeroDistraction uses simplified patterns based on the [URLPatternAPI](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API)
