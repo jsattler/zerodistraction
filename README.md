@@ -36,7 +36,7 @@ The easiest way is to [navigate to the extension page on addons.mozilla.org and 
 Alternatively, you can downlaod and manually install the extension.
 
 * [Navigate to the Releases.](https://github.com/jsattler/zerodistraction/releases)
-* In the Release Assets, download the `zerodistraction.zip`.
+* In the Release Assets, download the `zerodistraction-extension.zip`.
 * [Follow the instructions to manually install an extension.](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing)
 
 ## URL Pattern Matching
