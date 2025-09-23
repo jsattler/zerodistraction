@@ -1,0 +1,49 @@
+name: Release Extension
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+
+    - name: Create extension zip
+      run: |
+        # Create a temporary directory for the extension files
+        mkdir -p extension-build
+
+        # Copy all necessary files for the Firefox extension
+        cp manifest.json extension-build/
+        cp background.js extension-build/
+        cp content-script.js extension-build/
+        cp blocked.html extension-build/
+        cp blocked.js extension-build/
+        cp styles.css extension-build/
+        cp LICENSE extension-build/
+
+        # Copy directories
+        cp -r shared extension-build/
+        cp -r icons extension-build/
+        cp -r popup extension-build/
+        cp -r options extension-build/
+        cp -r blocklists extension-build/
+
+        # Create the zip file
+        cd extension-build
+        zip -r ../zerodistraction-extension.zip .
+        cd ..
+
+        # Verify the zip contents
+        unzip -l zerodistraction-extension.zip
+
+    - name: Upload extension zip to release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: zerodistraction-extension.zip
