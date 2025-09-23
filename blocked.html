@@ -109,6 +109,23 @@
             font-weight: 300;
             margin-top: 40px;
         }
+
+        .back-button {
+            background: rgba(160, 144, 107, 0.1);
+            border: 1px solid rgba(160, 144, 107, 0.3);
+            color: #8b7355;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            margin-top: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(160, 144, 107, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -127,6 +144,10 @@
         <p class="message">
             If it were easy, anyone could do it
         </p>
+
+        <button id="backButton" class="back-button" style="display: none;">
+            ← Go Back
+        </button>
     </div>
 
     <script src="shared/pattern-matcher.js"></script>

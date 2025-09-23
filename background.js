@@ -80,7 +80,7 @@ browser.webRequest.onBeforeRequest.addListener(
 
 browser.runtime.onInstalled.addListener(() => {
   loadBlocklists();
-  console.log('DistractionBlock extension installed');
+  console.log('ZeroDistraction extension installed');
 });
 
 browser.runtime.onStartup.addListener(() => {
@@ -89,10 +89,45 @@ browser.runtime.onStartup.addListener(() => {
 
 loadBlocklists();
 
-Storage.onUserOptionsChanged((changes) => {
-  console.log('Blocking settings updated:', changes);
+// Listen for storage changes to notify content scripts
+browser.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local' && changes['zerodistraction.options']) {
+    // User options changed
+    browser.tabs.query({}, (tabs) => {
+      tabs.forEach(tab => {
+        browser.tabs.sendMessage(tab.id, { action: 'settingsChanged' }).catch(() => {
+          // Ignore errors for tabs that don't have content script
+        });
+      });
+    });
+  }
+
+  if (areaName === 'local' && changes['zerodistraction.settings']) {
+    const newSettings = changes['zerodistraction.settings'].newValue;
+    if (newSettings && newSettings.enabled) {
+      // Timer started
+      browser.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          browser.tabs.sendMessage(tab.id, { action: 'timerStarted' }).catch(() => {});
+        });
+      });
+    } else {
+      // Timer stopped
+      browser.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          browser.tabs.sendMessage(tab.id, { action: 'timerStopped' }).catch(() => {});
+        });
+      });
+    }
+  }
 });
 
-Storage.onTimerSettingsChanged((newSettings) => {
-  console.log('Timer settings updated:', newSettings);
+// Handle messages from content scripts
+browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'checkUrl') {
+    shouldBlockUrl(message.url).then(shouldBlock => {
+      sendResponse({ shouldBlock });
+    });
+    return true; // Keep message channel open for async response
+  }
 });

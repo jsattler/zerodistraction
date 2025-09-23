@@ -1,96 +1,129 @@
-// TODO: The URL matching should be solid and use something that does not require a breaking change.
-// I need to do some research on this.
 const PatternMatcher = {
   matchPattern(pattern, url) {
-    if (!pattern.includes('://') && !pattern.includes('/')) {
-      return this.matchDomain(pattern, url);
-    }
-
     try {
       const urlObj = new URL(url);
+      const config = this.parseSimplifiedPattern(pattern);
 
-      const patternMatch = pattern.match(/^([^:]+):\/\/([^\/]+)(.*)$/);
-      if (!patternMatch) {
+      // Check protocol
+      if (config.protocol !== '*' && config.protocol !== urlObj.protocol.slice(0, -1)) {
         return false;
       }
 
-      const [, scheme, host, path] = patternMatch;
-
-      if (scheme !== '*' && scheme !== urlObj.protocol.slice(0, -1)) {
+      // Check hostname
+      if (!this.matchHostname(config.hostname, urlObj.hostname)) {
         return false;
       }
 
-      if (scheme === '*' && !['http', 'https'].includes(urlObj.protocol.slice(0, -1))) {
-        return false;
-      }
-
-      if (!this.matchHost(host, urlObj.hostname)) {
-        return false;
-      }
-
-      const urlPath = urlObj.pathname + urlObj.search;
-      if (!this.matchPath(path, urlPath)) {
+      // Check pathname
+      if (!this.matchPathname(config.pathname, urlObj.pathname + urlObj.search)) {
         return false;
       }
 
       return true;
     } catch (error) {
-      return this.matchDomain(pattern, url);
+      console.warn('Pattern matching error:', error);
+      return false;
     }
   },
 
-  matchHost(hostPattern, hostname) {
-    if (hostPattern === '*') {
-      return true;
-    }
+  matchHostname(pattern, hostname) {
+    if (pattern === '*') return true;
+    if (pattern === hostname) return true;
 
-    if (hostPattern === hostname) {
-      return true;
-    }
-
-    if (hostPattern.startsWith('*.')) {
-      const baseDomain = hostPattern.slice(2);
+    if (pattern.startsWith('*.')) {
+      const baseDomain = pattern.slice(2);
       return hostname === baseDomain || hostname.endsWith('.' + baseDomain);
     }
 
     return false;
   },
 
-  matchPath(pathPattern, urlPath) {
-    if (!pathPattern || pathPattern === '') {
-      pathPattern = '/*';
+  matchPathname(pattern, pathname) {
+    if (pattern === '*') return true;
+    if (pattern.endsWith('*')) {
+      return pathname.startsWith(pattern.slice(0, -1));
     }
-
-    if (pathPattern === '/*') {
-      return true;
-    }
-
-    const regexPattern = pathPattern
-      .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-      .replace(/\*/g, '.*');
-
-    const regex = new RegExp('^' + regexPattern + '$');
-    return regex.test(urlPath);
+    return pathname === pattern;
   },
 
-  matchDomain(pattern, url) {
-    const cleanUrl = url.replace(/^https?:\/\//, '').replace(/\/.*$/, '');
-    const cleanPattern = pattern.replace(/^https?:\/\//, '');
-
-    let matchPattern = cleanPattern;
-    if (!matchPattern.startsWith('*')) {
-      matchPattern = '*.' + matchPattern;
+  parseSimplifiedPattern(pattern) {
+    if (!pattern || typeof pattern !== 'string') {
+      return null;
     }
 
-    const regexPattern = matchPattern
-      .replace(/[.+^${}()|[\]\\]/g, '\\$&')
-      .replace(/\*/g, '.*')
-      .replace(/\?/g, '.');
+    pattern = pattern.trim();
 
-    const regex = new RegExp('^' + regexPattern + '$', 'i');
-    const result = regex.test(cleanUrl) || cleanUrl === cleanPattern; // Also match exact domain
+    // Handle full URLs with scheme
+    const fullUrlMatch = pattern.match(/^(https?):\/\/(.+)$/);
+    if (fullUrlMatch) {
+      const [, protocol, rest] = fullUrlMatch;
+      const pathIndex = rest.indexOf('/');
 
-    return result;
+      if (pathIndex === -1) {
+        // No path specified: https://domain.com
+        const hostname = this.expandHostname(rest);
+        return {
+          protocol,
+          hostname,
+          pathname: '*'
+        };
+      } else {
+        // Path specified: https://domain.com/path
+        const hostname = this.expandHostname(rest.substring(0, pathIndex));
+        const pathname = this.expandPath(rest.substring(pathIndex));
+        return {
+          protocol,
+          hostname,
+          pathname
+        };
+      }
+    }
+
+    // Handle URLs without scheme
+    const pathIndex = pattern.indexOf('/');
+    if (pathIndex === -1) {
+      // Just domain: domain.com
+      return {
+        protocol: '*',
+        hostname: this.expandHostname(pattern),
+        pathname: '*'
+      };
+    } else {
+      // Domain with path: domain.com/path
+      const hostname = this.expandHostname(pattern.substring(0, pathIndex));
+      const pathname = this.expandPath(pattern.substring(pathIndex));
+      return {
+        protocol: '*',
+        hostname,
+        pathname
+      };
+    }
+  },
+
+  expandHostname(hostname) {
+    // If hostname already has wildcard, use as-is
+    if (hostname.includes('*')) {
+      return hostname;
+    }
+
+    // If hostname has subdomain (more than 2 parts), match exactly
+    const parts = hostname.split('.');
+    if (parts.length > 2) {
+      return hostname;
+    }
+
+    // Otherwise, match all subdomains
+    return `*.${hostname}`;
+  },
+
+  expandPath(path) {
+    // If path already ends with *, use as-is
+    if (path.endsWith('*')) {
+      return path;
+    }
+
+    // Otherwise, match this path and all sub-paths
+    return `${path}*`;
   },
 
   globMatch(pattern, url) {
@@ -107,28 +140,17 @@ const PatternMatcher = {
     pattern = pattern.trim();
     if (pattern.length === 0) return false;
 
-    if (pattern.includes('://')) {
-      try {
-        const match = pattern.match(/^([^:]+):\/\/([^\/]+)(.*)$/);
-        if (!match) return false;
+    try {
+      // Try to parse as simplified pattern
+      const urlPatternConfig = this.parseSimplifiedPattern(pattern);
+      if (!urlPatternConfig) return false;
 
-        const [, scheme, host, path] = match;
-
-        if (scheme !== '*' && !['http', 'https', 'ws', 'wss', 'ftp'].includes(scheme)) {
-          return false;
-        }
-
-        if (!host || host.length === 0) return false;
-
-        if (path && !path.startsWith('/')) return false;
-
-        return true;
-      } catch (error) {
-        return false;
-      }
+      // Test if URLPattern can be created
+      new URLPattern(urlPatternConfig);
+      return true;
+    } catch (error) {
+      return false;
     }
-
-    return pattern.includes('.') || pattern.includes('*') || pattern.length > 3;
   },
 
   parsePatterns(input) {

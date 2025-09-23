@@ -40,6 +40,13 @@
     "64": "icons/blob.svg",
     "96": "icons/blob.svg"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script.js"],
+      "run_at": "document_start"
+    }
+  ],
   "web_accessible_resources": [
     "blocklists/social.json",
     "blocklists/news.json",

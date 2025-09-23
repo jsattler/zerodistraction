@@ -93,15 +93,15 @@
       <div class="tooltip-container">
         <button class="tooltip-btn" type="button">?</button>
         <div class="tooltip-text">
-          Enter WebExtension Match patterns (one per line) that should be blocked in addition to the presets above.
-          Format: &lt;scheme&gt;://&lt;host&gt;&lt;path&gt;. Examples: *://*.example.com/*, https://site.com/*, *://*/path/*
+          Enter URL patterns (one per line) that should be blocked in addition to the presets above.
+          Simply enter domains, paths, or full URLs. Examples: reddit.com, youtube.com/shorts, https://distracting-site.com
         </div>
       </div>
     </div>
     <textarea
       class="exceptions-input"
       id="additional-urls-input"
-      placeholder="*://*.reddit.com/*&#10;*://*.twitter.com/*&#10;https://distracting-site.com/path/*"
+      placeholder="reddit.com&#10;youtube.com/shorts&#10;https://distracting-site.com/path"
     ></textarea>
   </div>
 
@@ -111,15 +111,15 @@
       <div class="tooltip-container">
         <button class="tooltip-btn" type="button">?</button>
         <div class="tooltip-text">
-          Enter WebExtension Match patterns (one per line) that should not be blocked, even if they match the blocklists above.
-          Format: &lt;scheme&gt;://&lt;host&gt;&lt;path&gt;. Examples: *://*.example.com/*, https://site.com/*, *://*/path/*
+          Enter URL patterns (one per line) that should not be blocked, even if they match the blocklists above.
+          Simply enter domains, paths, or full URLs. Examples: work.facebook.com, news.ycombinator.com/jobs, work-domain.com
         </div>
       </div>
     </div>
     <textarea
       class="exceptions-input"
       id="exceptions-input"
-      placeholder="*://*.work.facebook.com/*&#10;https://news.ycombinator.com/jobs*&#10;*://*.work-domain.com/*"
+      placeholder="work.facebook.com&#10;news.ycombinator.com/jobs&#10;work-domain.com"
     ></textarea>
   </div>
 

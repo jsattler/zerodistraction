@@ -1,15 +1,15 @@
 [
-  "*://*.ycombinator.com/*",
-  "*://*.theguardian.com/*",
-  "*://*.derspiegel.de/*",
-  "*://*.cnn.com/*",
-  "*://*.bbc.com/*",
-  "*://*.nytimes.com/*",
-  "*://*.washingtonpost.com/*",
-  "*://*.reuters.com/*",
-  "*://*.bloomberg.com/*",
-  "*://*.wsj.com/*",
-  "*://*.techcrunch.com/*",
-  "*://*.arstechnica.com/*",
-  "*://*.wired.com/*"
+  "ycombinator.com",
+  "theguardian.com",
+  "derspiegel.de",
+  "cnn.com",
+  "bbc.com",
+  "nytimes.com",
+  "washingtonpost.com",
+  "reuters.com",
+  "bloomberg.com",
+  "wsj.com",
+  "techcrunch.com",
+  "arstechnica.com",
+  "wired.com"
 ]

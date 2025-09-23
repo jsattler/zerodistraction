@@ -3,7 +3,7 @@
 Stay focused and avoid distractions.
 A Firefox extension that blocks distracting websites for a selected time.
 
-![ZeroDistraction blocked page](screenshots/zerodistraction-blocked-page.png)
+![ZeroDistraction blocked page](screenshots/zerodistraction-screencapture-2.gif)
 
 ## Why ZeroDistraction?
 
@@ -20,12 +20,32 @@ It's about creating intentional breaks from distraction when you need to get thi
 
 ## How does it work?
 
+![ZeroDistraction howto](screenshots/zerodistraction-screencapture.gif)
+
 * Set a focus timer for your desired duration
 * Distracting websites are automatically blocked during the timer
 * Ships with categorized presets (social media, news, entertainment) to block
 * Blocked sites show a simple countdown instead of their content
 * Configure an allowlist of URLs that remain accessible even during focus sessions
 * Timer runs in the background - no need to keep the extension popup open
+
+## URL Pattern Matching
+
+ZeroDistraction uses simplified patterns based on the [URLPatternAPI](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API)
+- if you don't specify the scheme, subdomain or path, it matches all variants.
+
+
+| Pattern | Matches |
+|---------|--------|
+| `youtube.com` | All YouTube URLs (any subdomain, scheme, path) |
+| `https://youtube.com` | Only HTTPS YouTube |
+| `www.youtube.com` | Only www subdomain |
+| `youtube.com/shorts` | YouTube Shorts on any subdomain |
+
+**Exceptions override blocklists:**
+- Blocklist: `facebook.com` (blocks all Facebook)
+- Exception: `work.facebook.com` (allows work Facebook)
+- Result: `work.facebook.com` accessible, `www.facebook.com` blocked
 
 ## Similar Extensions
 

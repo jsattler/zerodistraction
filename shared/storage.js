@@ -37,29 +37,35 @@ const Storage = {
   async saveTimerSettings(settings) {
     return new Promise((resolve) => {
       browser.storage.local.set({ 'zerodistraction.settings': settings }, () => {
-        console.log('Timer settings saved:', settings);
         resolve();
       });
     });
   },
 
-  // Load user options from sync storage
+  // Load user options from local storage
   async loadUserOptions() {
-    return new Promise((resolve) => {
-      browser.storage.sync.get(this.DEFAULT_OPTIONS, (result) => {
-        // Ensure we always return a valid object with defaults
-        const options = result || {};
-        resolve({ ...this.DEFAULT_OPTIONS, ...options });
+    return new Promise((resolve, reject) => {
+      browser.storage.local.get(['zerodistraction.options'], (result) => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          const storedOptions = result && result['zerodistraction.options'];
+          const finalOptions = storedOptions ? { ...this.DEFAULT_OPTIONS, ...storedOptions } : { ...this.DEFAULT_OPTIONS };
+          resolve(finalOptions);
+        }
       });
     });
   },
 
-  // Save user options to sync storage
+  // Save user options to local storage
   async saveUserOptions(options) {
-    return new Promise((resolve) => {
-      browser.storage.sync.set(options, () => {
-        console.log('User options saved:', options);
-        resolve();
+    return new Promise((resolve, reject) => {
+      browser.storage.local.set({ 'zerodistraction.options': options }, () => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve();
+        }
       });
     });
   },
@@ -79,12 +85,12 @@ const Storage = {
     };
 
     // Parse exceptions and additional URLs
-    timerSettings.exceptions = userOptions.exceptions
+    timerSettings.exceptions = (userOptions.exceptions || '')
       .split('\n')
       .map(line => line.trim())
       .filter(line => line.length > 0);
 
-    timerSettings.additionalUrls = userOptions.additionalUrls
+    timerSettings.additionalUrls = (userOptions.additionalUrls || '')
       .split('\n')
       .map(line => line.trim())
       .filter(line => line.length > 0);
@@ -98,20 +104,6 @@ const Storage = {
       if (areaName === 'local' && changes['zerodistraction.settings']) {
         const newValue = changes['zerodistraction.settings'].newValue || { ...this.DEFAULT_SETTINGS };
         callback(newValue);
-      }
-    });
-  },
-
-  onUserOptionsChanged(callback) {
-    browser.storage.onChanged.addListener((changes, areaName) => {
-      if (areaName === 'sync' && (
-        changes.socialEnabled ||
-        changes.newsEnabled ||
-        changes.entertainmentEnabled ||
-        changes.exceptions ||
-        changes.additionalUrls
-      )) {
-        callback(changes);
       }
     });
   }
