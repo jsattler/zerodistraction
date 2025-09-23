@@ -1,7 +1,7 @@
 # ZeroDistraction - Firefox Extension
 
 Stay focused and avoid distractions.
-A Firefox extension that blocks distracting websites for a selected time.
+[ZeroDistraction is a Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/zerodistraction/) that blocks distracting websites for a selected time.
 
 ![ZeroDistraction blocked page](screenshots/zerodistraction-screencapture-2.gif)
 
