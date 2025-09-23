@@ -3,6 +3,7 @@ const PatternMatcher = {
     try {
       const urlObj = new URL(url);
       const config = this.parseSimplifiedPattern(pattern);
+      if (!config) return false;
 
       // Check protocol
       if (config.protocol !== '*' && config.protocol !== urlObj.protocol.slice(0, -1)) {
@@ -24,26 +25,6 @@ const PatternMatcher = {
       console.warn('Pattern matching error:', error);
       return false;
     }
-  },
-
-  matchHostname(pattern, hostname) {
-    if (pattern === '*') return true;
-    if (pattern === hostname) return true;
-
-    if (pattern.startsWith('*.')) {
-      const baseDomain = pattern.slice(2);
-      return hostname === baseDomain || hostname.endsWith('.' + baseDomain);
-    }
-
-    return false;
-  },
-
-  matchPathname(pattern, pathname) {
-    if (pattern === '*') return true;
-    if (pattern.endsWith('*')) {
-      return pathname.startsWith(pattern.slice(0, -1));
-    }
-    return pathname === pattern;
   },
 
   parseSimplifiedPattern(pattern) {
@@ -100,6 +81,26 @@ const PatternMatcher = {
     }
   },
 
+  matchHostname(pattern, hostname) {
+    if (pattern === '*') return true;
+    if (pattern === hostname) return true;
+
+    if (pattern.startsWith('*.')) {
+      const baseDomain = pattern.slice(2);
+      return hostname === baseDomain || hostname.endsWith('.' + baseDomain);
+    }
+
+    return false;
+  },
+
+  matchPathname(pattern, pathname) {
+    if (pattern === '*') return true;
+    if (pattern.endsWith('*')) {
+      return pathname.startsWith(pattern.slice(0, -1));
+    }
+    return pathname === pattern;
+  },
+
   expandHostname(hostname) {
     // If hostname already has wildcard, use as-is
     if (hostname.includes('*')) {
@@ -141,13 +142,8 @@ const PatternMatcher = {
     if (pattern.length === 0) return false;
 
     try {
-      // Try to parse as simplified pattern
-      const urlPatternConfig = this.parseSimplifiedPattern(pattern);
-      if (!urlPatternConfig) return false;
-
-      // Test if URLPattern can be created
-      new URLPattern(urlPatternConfig);
-      return true;
+      const config = this.parseSimplifiedPattern(pattern);
+      return config !== null;
     } catch (error) {
       return false;
     }

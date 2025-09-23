@@ -26,9 +26,12 @@
     "default_title": "ZeroDistraction",
     "default_popup": "popup/popup.html",
     "default_icon": {
+      "16": "icons/blob.svg",
+      "19": "icons/blob.svg",
       "32": "icons/blob.svg",
-      "64": "icons/blob.svg",
-      "96": "icons/blob.svg"
+      "38": "icons/blob.svg",
+      "48": "icons/blob.svg",
+      "128": "icons/blob.svg"
     }
   },
   "options_ui": {
@@ -36,9 +39,9 @@
     "open_in_tab": true
   },
   "icons": {
-    "32": "icons/blob.svg",
-    "64": "icons/blob.svg",
-    "96": "icons/blob.svg"
+    "16": "icons/blob.svg",
+    "48": "icons/blob.svg",
+    "128": "icons/blob.svg"
   },
   "content_scripts": [
     {
@@ -51,6 +54,7 @@
     "blocklists/social.json",
     "blocklists/news.json",
     "blocklists/entertainment.json",
-    "blocked.html"
+    "blocked.html",
+    "icons/blob.svg"
   ]
 }

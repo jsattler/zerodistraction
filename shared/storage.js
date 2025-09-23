@@ -1,5 +1,8 @@
 // Centralized storage interface for DistractionBlock extension
 
+// Browser API compatibility
+const browserAPI = (typeof browser !== 'undefined' && browser) || (typeof chrome !== 'undefined' && chrome);
+
 const Storage = {
   // Default settings structure
   DEFAULT_SETTINGS: {
@@ -24,50 +27,48 @@ const Storage = {
 
   // Load timer settings from local storage
   async loadTimerSettings() {
-    return new Promise((resolve) => {
-      browser.storage.local.get(['zerodistraction.settings'], (result) => {
-        const storedSettings = result && result['zerodistraction.settings'];
-        const settings = storedSettings ? { ...this.DEFAULT_SETTINGS, ...storedSettings } : { ...this.DEFAULT_SETTINGS };
-        resolve(settings);
-      });
-    });
+    try {
+      const result = await browser.storage.local.get(['zerodistraction.settings']);
+      const storedSettings = result && result['zerodistraction.settings'];
+      const settings = storedSettings ? { ...this.DEFAULT_SETTINGS, ...storedSettings } : { ...this.DEFAULT_SETTINGS };
+      return settings;
+    } catch (error) {
+      console.error('Error loading timer settings:', error);
+      return { ...this.DEFAULT_SETTINGS };
+    }
   },
 
   // Save timer settings to local storage
   async saveTimerSettings(settings) {
-    return new Promise((resolve) => {
-      browser.storage.local.set({ 'zerodistraction.settings': settings }, () => {
-        resolve();
-      });
-    });
+    try {
+      await browser.storage.local.set({ 'zerodistraction.settings': settings });
+    } catch (error) {
+      console.error('Error saving timer settings:', error);
+      throw error;
+    }
   },
 
   // Load user options from local storage
   async loadUserOptions() {
-    return new Promise((resolve, reject) => {
-      browser.storage.local.get(['zerodistraction.options'], (result) => {
-        if (browser.runtime.lastError) {
-          reject(browser.runtime.lastError);
-        } else {
-          const storedOptions = result && result['zerodistraction.options'];
-          const finalOptions = storedOptions ? { ...this.DEFAULT_OPTIONS, ...storedOptions } : { ...this.DEFAULT_OPTIONS };
-          resolve(finalOptions);
-        }
-      });
-    });
+    try {
+      const result = await browser.storage.local.get(['zerodistraction.options']);
+      const storedOptions = result && result['zerodistraction.options'];
+      const finalOptions = storedOptions ? { ...this.DEFAULT_OPTIONS, ...storedOptions } : { ...this.DEFAULT_OPTIONS };
+      return finalOptions;
+    } catch (error) {
+      console.error('Error loading user options:', error);
+      return { ...this.DEFAULT_OPTIONS };
+    }
   },
 
   // Save user options to local storage
   async saveUserOptions(options) {
-    return new Promise((resolve, reject) => {
-      browser.storage.local.set({ 'zerodistraction.options': options }, () => {
-        if (browser.runtime.lastError) {
-          reject(browser.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
-    });
+    try {
+      await browser.storage.local.set({ 'zerodistraction.options': options });
+    } catch (error) {
+      console.error('Error saving user options:', error);
+      throw error;
+    }
   },
 
   // Get complete settings (merges timer settings with user options)

@@ -63,10 +63,8 @@
   // Listen for messages from background script
   browser.runtime.onMessage.addListener((message) => {
     if (message.action === 'settingsChanged') {
-      // Only check if page is not fully loaded (i.e., during initial load)
-      if (!isPageFullyLoaded) {
-        checkAndRedirectIfNeeded();
-      }
+      // Always check when settings change, regardless of page load status
+      checkAndRedirectIfNeeded();
     } else if (message.action === 'timerStarted') {
       // When timer starts, only check if page is not fully loaded
       if (!isPageFullyLoaded) {

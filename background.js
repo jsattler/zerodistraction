@@ -90,34 +90,38 @@ browser.runtime.onStartup.addListener(() => {
 loadBlocklists();
 
 // Listen for storage changes to notify content scripts
-browser.storage.onChanged.addListener((changes, areaName) => {
+browser.storage.onChanged.addListener(async (changes, areaName) => {
   if (areaName === 'local' && changes['zerodistraction.options']) {
     // User options changed
-    browser.tabs.query({}, (tabs) => {
+    try {
+      const tabs = await browser.tabs.query({});
       tabs.forEach(tab => {
         browser.tabs.sendMessage(tab.id, { action: 'settingsChanged' }).catch(() => {
           // Ignore errors for tabs that don't have content script
         });
       });
-    });
+    } catch (error) {
+      console.error('Error sending settingsChanged message:', error);
+    }
   }
 
   if (areaName === 'local' && changes['zerodistraction.settings']) {
     const newSettings = changes['zerodistraction.settings'].newValue;
-    if (newSettings && newSettings.enabled) {
-      // Timer started
-      browser.tabs.query({}, (tabs) => {
+    try {
+      const tabs = await browser.tabs.query({});
+      if (newSettings && newSettings.enabled) {
+        // Timer started
         tabs.forEach(tab => {
           browser.tabs.sendMessage(tab.id, { action: 'timerStarted' }).catch(() => {});
         });
-      });
-    } else {
-      // Timer stopped
-      browser.tabs.query({}, (tabs) => {
+      } else {
+        // Timer stopped
         tabs.forEach(tab => {
           browser.tabs.sendMessage(tab.id, { action: 'timerStopped' }).catch(() => {});
         });
-      });
+      }
+    } catch (error) {
+      console.error('Error sending timer status message:', error);
     }
   }
 });
