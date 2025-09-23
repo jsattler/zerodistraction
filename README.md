@@ -27,6 +27,25 @@ It's about creating intentional breaks from distraction when you need to get thi
 * Configure an allowlist of URLs that remain accessible even during focus sessions
 * Timer runs in the background - no need to keep the extension popup open
 
+## Similar Extensions
+
+* [**LeechBlockNG**](https://addons.mozilla.org/en-US/firefox/addon/leechblock-ng/): Very mature, feature-rich and customizable extension.
+  * **What kept me from using it?** I wanted something simpler, cleaner and without the need for extensive configuration.
+  I don't want to bother reading through long documentation and spend half a day just to get started.
+  I just want to select a time period and get started - easy as that.
+
+## Privacy and Data Protection
+
+ZeroDistraction respects your privacy and protects your data:
+
+**Why does the extension need permissions?**
+* **Access to web requests**: Required to detect and block the URLs from the block lists
+* **Storage permission**: Stores your settings (timer duration, blocklists, allowlist) locally on your device only
+
+**Your data stays private:**
+* **Zero data collection**: We don't collect, store, or analyze any of your browsing data
+* **No external connections**: The extension never sends any information to external servers or third parties
+* **Local storage only**: All your settings and preferences remain on your device
 
 ## Contributing
 
