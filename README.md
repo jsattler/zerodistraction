@@ -1,9 +1,21 @@
-# ZeroDistraction - Firefox Extension
+<p align="center">
+  <img src="icons/blob.svg" width="200" height="200" alt="ZeroDistraction Logo">
+</p>
 
-Stay focused and avoid distractions.
-[ZeroDistraction is a Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/zerodistraction/) that blocks distracting websites for a selected time.
+<h1 align="center">ZeroDistraction</h1>
 
-![ZeroDistraction blocked page](screenshots/zerodistraction-screencapture-2.gif)
+<p align="center">
+  Stay focused and avoid distractions.<br>
+  A Firefox extension that blocks distracting websites for a selected time.
+</p>
+
+<p align="center">
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/zerodistraction/">Firefox Extension</a> ·
+  <a href="#installation">Installation</a> ·
+  <a href="#how-does-it-work">How it works</a> ·
+  <a href="#contributing">Contributing</a>
+</p>
+
 
 ## Why ZeroDistraction?
 
