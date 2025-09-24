@@ -23,7 +23,7 @@ You sit down to work on something important.
 You open your browser and tell yourself "just one quick check" on HackerNews or YouTube.
 Three hours later, you're still scrolling, and that important task remains untouched.
 We've all been there.
-The internet is designed to capture and hold your attention.
+The internet is designed to capture and hold our attention.
 
 **ZeroDistraction puts you back in control.**
 When you need to focus, activate it for a set time period.
@@ -34,12 +34,11 @@ It's about creating intentional breaks from distraction when you need to get thi
 
 ![ZeroDistraction howto](screenshots/zerodistraction-screencapture.gif)
 
-* Set a focus timer for your desired duration
-* Distracting websites are automatically blocked during the timer
-* Ships with categorized presets (social media, news, entertainment) to block
+* Select a duration, press *Start* and get things done
+* Ships with categorized presets to block (social media, news, entertainment)
 * Blocked sites show a simple countdown instead of their content
-* Configure an allowlist of URLs that remain accessible even during focus sessions
-* Timer runs in the background - no need to keep the extension popup open
+* Configure exceptions of URLs that remain accessible even during focus sessions
+* Configure additional URLs to block that are not yet part of the presets
 
 ## Installation
 
