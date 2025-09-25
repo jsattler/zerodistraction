@@ -32,9 +32,8 @@
       display: block;
     }
 
-    .timer-control {
+    .timer-section .timer-control {
       text-align: center;
-      margin-top: 24px;
     }
 
     .timer-display {
@@ -52,7 +51,7 @@
     }
 
     .external-link {
-      color: #0066cc;
+      color: #66aaff;
       text-decoration: none;
       font-size: 14px;
       margin-left: 8px;
@@ -62,87 +61,115 @@
     }
 
     .external-link:hover {
-      color: #004499;
+      color: #99ccff;
       text-decoration: underline;
+    }
+
+    .options-card {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 48px;
+      margin-bottom: 24px;
+    }
+
+    .options-card .section {
+      background: none;
+      border-radius: 0;
+      padding: 0;
+      margin-bottom: 32px;
+    }
+
+    .options-card .section:not(:last-child) {
+      padding-bottom: 24px;
+      border-bottom: 1px solid #333;
+    }
+
+    .options-card .section:last-child {
+      margin-bottom: 0;
     }
   </style>
 </head>
 <body>
-  <div class="section">
-    <div class="section-title">Distraction Presets</div>
-    <div class="blocklist-item">
-      <input type="checkbox" id="social-checkbox" checked>
-      <label for="social-checkbox">Social Media</label>
-      <a href="../blocklists/social.json" target="_blank" class="external-link" title="View Social Media blocklist">View Preset</a>
+  <div class="options-card">
+    <div class="section">
+      <div class="section-title">Distraction Presets</div>
+      <div class="blocklist-item">
+        <input type="checkbox" id="social-checkbox" checked>
+        <label for="social-checkbox">Social Media</label>
+        <a href="../blocklists/social.json" target="_blank" class="external-link" title="View Social Media blocklist">View Preset</a>
+      </div>
+      <div class="blocklist-item">
+        <input type="checkbox" id="news-checkbox" checked>
+        <label for="news-checkbox">News Sites</label>
+        <a href="../blocklists/news.json" target="_blank" class="external-link" title="View News Sites blocklist">View Preset</a>
+      </div>
+      <div class="blocklist-item">
+        <input type="checkbox" id="entertainment-checkbox" checked>
+        <label for="entertainment-checkbox">Entertainment</label>
+        <a href="../blocklists/entertainment.json" target="_blank" class="external-link" title="View Entertainment blocklist">View Preset</a>
+      </div>
+      <div style="text-align: center; margin-top: 16px; font-size: 13px; color: #999;">
+        Missing a website in the presets? <a href="https://github.com/jsattler/zerodistraction" target="_blank" style="color: #66aaff; text-decoration: none;">Open a pull request on GitHub.</a>
+      </div>
     </div>
-    <div class="blocklist-item">
-      <input type="checkbox" id="news-checkbox" checked>
-      <label for="news-checkbox">News Sites</label>
-      <a href="../blocklists/news.json" target="_blank" class="external-link" title="View News Sites blocklist">View Preset</a>
-    </div>
-    <div class="blocklist-item">
-      <input type="checkbox" id="entertainment-checkbox" checked>
-      <label for="entertainment-checkbox">Entertainment</label>
-      <a href="../blocklists/entertainment.json" target="_blank" class="external-link" title="View Entertainment blocklist">View Preset</a>
-    </div>
-    <div style="text-align: center; margin-top: 16px; font-size: 13px; color: #666;">
-      Missing a website in the presets? <a href="https://github.com/jsattler/zerodistraction" target="_blank" style="color: #0066cc; text-decoration: none;">Open a pull request on GitHub.</a>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title-with-tooltip">
-      Additional URLs
-      <div class="tooltip-container">
-        <button class="tooltip-btn" type="button">?</button>
-        <div class="tooltip-text">
-          Enter URL patterns (one per line) that should be blocked in addition to the presets above.
-          Simply enter domains, paths, or full URLs. Examples: reddit.com, youtube.com/shorts, https://distracting-site.com
+    <div class="section">
+      <div class="section-title-with-tooltip">
+        Additional URLs
+        <div class="tooltip-container">
+          <button class="tooltip-btn" type="button">?</button>
+          <div class="tooltip-text">
+            Enter URL patterns (one per line) that should be blocked in addition to the presets above.
+            Simply enter domains, paths, or full URLs. Examples: reddit.com, youtube.com/shorts, https://distracting-site.com
+          </div>
         </div>
       </div>
+      <textarea
+        class="exceptions-input"
+        id="additional-urls-input"
+        placeholder="reddit.com&#10;youtube.com/shorts&#10;https://distracting-site.com/path"
+      ></textarea>
     </div>
-    <textarea
-      class="exceptions-input"
-      id="additional-urls-input"
-      placeholder="reddit.com&#10;youtube.com/shorts&#10;https://distracting-site.com/path"
-    ></textarea>
-  </div>
 
-  <div class="section">
-    <div class="section-title-with-tooltip">
-      Exceptions
-      <div class="tooltip-container">
-        <button class="tooltip-btn" type="button">?</button>
-        <div class="tooltip-text">
-          Enter URL patterns (one per line) that should not be blocked, even if they match the blocklists above.
-          Simply enter domains, paths, or full URLs. Examples: work.facebook.com, news.ycombinator.com/jobs, work-domain.com
+    <div class="section">
+      <div class="section-title-with-tooltip">
+        Exceptions
+        <div class="tooltip-container">
+          <button class="tooltip-btn" type="button">?</button>
+          <div class="tooltip-text">
+            Enter URL patterns (one per line) that should not be blocked, even if they match the blocklists above.
+            Simply enter domains, paths, or full URLs. Examples: work.facebook.com, news.ycombinator.com/jobs, work-domain.com
+          </div>
         </div>
       </div>
+      <textarea
+        class="exceptions-input"
+        id="exceptions-input"
+        placeholder="work.facebook.com&#10;news.ycombinator.com/jobs&#10;work-domain.com"
+      ></textarea>
     </div>
-    <textarea
-      class="exceptions-input"
-      id="exceptions-input"
-      placeholder="work.facebook.com&#10;news.ycombinator.com/jobs&#10;work-domain.com"
-    ></textarea>
-  </div>
 
-  <div class="timer-control" id="timer-control">
-    <div class="timer-display" id="timer-display">00:30:00</div>
-    <div class="slider-container" style="display: none;">
-      <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
-      <div class="slider-labels">
-        <span>0m</span>
-        <span>2h</span>
-        <span>4h</span>
-        <span>6h</span>
-        <span>8h</span>
+    <div class="section timer-section">
+      <div class="timer-control" id="timer-control">
+        <div class="timer-display" id="timer-display">00:30:00</div>
+        <div class="slider-container" style="display: none;">
+          <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
+          <div class="slider-labels">
+            <span>0m</span>
+            <span>2h</span>
+            <span>4h</span>
+            <span>6h</span>
+            <span>8h</span>
+          </div>
+        </div>
+        <div class="progress-bar" id="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
+        <button class="stop-btn btn btn-danger" id="stop-btn">STOP, I NEED DOPAMINE!</button>
       </div>
     </div>
-    <div class="progress-bar" id="progress-bar">
-      <div class="progress-fill" id="progress-fill"></div>
-    </div>
-    <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
-    <button class="stop-btn btn btn-danger" id="stop-btn">STOP, I NEED DOPAMINE!</button>
   </div>
 
   <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
@@ -150,7 +177,7 @@
       <a href="https://github.com/jsattler/zerodistraction" target="_blank"><img src="../icons/github-mark.svg" alt="GitHub" style="height: 30px; width: 30px;" ></a>
       <a href="https://www.buymeacoffee.com/jsattler" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 144px !important;" ></a>
     </div>
-    <div style="font-size: 14px; color: black;">Made with ❤️ in 🇪🇺</div>
+    <div style="font-size: 14px; color: white;">Made with ❤️ in 🇪🇺</div>
   </div>
 
   <script src="../shared/pattern-matcher.js"></script>

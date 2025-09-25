@@ -5,8 +5,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   padding: 0;
-  background: white;
-  color: black;
+  background: black;
+  color: white;
 }
 
 /* Typography */
@@ -18,7 +18,7 @@ h5,
 h6 {
   margin: 0;
   font-weight: 300;
-  color: black;
+  color: white;
 }
 
 /* Common container styles */
@@ -34,7 +34,7 @@ h6 {
 }
 
 .section {
-  background: white;
+  background: #1a1a1a;
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
@@ -43,7 +43,7 @@ h6 {
 .section-title {
   font-weight: 600;
   margin-bottom: 16px;
-  color: black;
+  color: white;
   font-size: 16px;
 }
 
@@ -51,7 +51,7 @@ h6 {
 .timer-display {
   font-size: 3em;
   font-weight: 200;
-  color: black;
+  color: white;
   text-align: center;
   margin: 20px 0;
   font-variant-numeric: tabular-nums;
@@ -73,7 +73,7 @@ h6 {
 .progress-bar {
   width: 100%;
   height: 2px;
-  background: #ccc;
+  background: #333;
   border-radius: 1px;
   margin: 20px 0;
   overflow: hidden;
@@ -81,7 +81,7 @@ h6 {
 
 .progress-fill {
   height: 100%;
-  background: black;
+  background: white;
   border-radius: 1px;
   transition: width 0.3s ease;
   width: 0%;
@@ -102,12 +102,12 @@ h6 {
 }
 
 .btn-primary {
-  background: black;
-  color: white;
+  background: white;
+  color: black;
 }
 
 .btn-primary:hover {
-  background: #171717;
+  background: #e5e5e5;
 }
 
 .btn-danger {
@@ -126,32 +126,32 @@ h6 {
 
 /* Form elements */
 input[type="checkbox"] {
-  accent-color: black;
+  accent-color: white;
   margin-right: 12px;
 }
 
 label {
   cursor: pointer;
-  color: black;
+  color: white;
 }
 
 textarea {
   width: 100%;
   min-height: 120px;
   padding: 12px;
-  border: 1px solid black;
+  border: 1px solid white;
   border-radius: 6px;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   font-size: 13px;
   resize: vertical;
   box-sizing: border-box;
-  background: white;
-  color: black;
+  background: #1a1a1a;
+  color: white;
 }
 
 textarea:focus {
   outline: none;
-  border-color: black;
+  border-color: white;
 }
 
 /* Slider styles */
@@ -165,7 +165,7 @@ textarea:focus {
   -webkit-appearance: none;
   appearance: none;
   border-radius: 3px;
-  background: #ccc;
+  background: #333;
   outline: none;
   cursor: pointer;
 }
@@ -176,7 +176,7 @@ textarea:focus {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: black;
+  background: white;
   cursor: pointer;
 }
 
@@ -184,7 +184,7 @@ textarea:focus {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: black;
+  background: white;
   cursor: pointer;
   border: none;
 }
@@ -193,7 +193,7 @@ textarea:focus {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: black;
+  color: white;
   margin-top: 4px;
 }
 
@@ -211,14 +211,14 @@ textarea:focus {
 /* Help text */
 .help-text {
   font-size: 12px;
-  color: black;
+  color: white;
   margin-top: 8px;
   line-height: 1.4;
 }
 
 /* Links */
 a {
-  color: black;
+  color: white;
   text-decoration: none;
   font-size: 12px;
 }
@@ -234,9 +234,9 @@ a:hover {
   margin-bottom: 16px;
   text-align: center;
   font-weight: 500;
-  background-color: white;
-  color: black;
-  border: 1px solid black;
+  background-color: #1a1a1a;
+  color: white;
+  border: 1px solid white;
 }
 
 /* Responsive helpers */
@@ -336,7 +336,7 @@ a:hover {
   align-items: center;
   font-weight: 600;
   margin-bottom: 20px;
-  color: black;
+  color: white;
   font-size: 16px;
 }
 
