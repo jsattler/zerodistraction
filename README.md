@@ -6,7 +6,7 @@
 
 <p align="center">
   Stay focused and avoid distractions.<br>
-  A Firefox extension that blocks distracting websites for a selected time.
+  A firefox extension that blocks distracting websites to stay focused when you need it most.
 </p>
 
 <p align="center">
