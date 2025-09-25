@@ -6,19 +6,36 @@
   <link rel="stylesheet" href="../styles.css">
   <style>
     body {
-      width: 320px;
+      width: 260px;
       padding: 20px;
       font-size: 14px;
+      background: white !important;
     }
 
     .timer-section {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .options-link {
       text-align: center;
       margin-top: 16px;
       padding-top: 16px;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #0f172a;
+      border: 1px solid #e5e7eb;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+      color: #0f172a;
+      text-decoration: none;
+      border-color: #d1d5db;
     }
   </style>
 </head>
@@ -42,7 +59,7 @@
   </div>
 
   <div class="options-link">
-    <a href="#" id="options-link">Options</a>
+    <a href="#" id="options-link" class="btn btn-secondary btn-full">Settings</a>
   </div>
 
   <script src="../shared/pattern-matcher.js"></script>
