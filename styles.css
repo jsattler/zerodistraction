@@ -240,29 +240,141 @@ a:hover {
 }
 
 /* Responsive helpers */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .container {
     padding: 15px;
+    max-width: 95%;
+  }
+
+  .section {
+    padding: 10px;
   }
 
   .timer-display {
-    font-size: 2.5em;
+    font-size: 2.8em;
   }
 
   .timer-display.large {
-    font-size: 4em;
+    font-size: 4.5em;
+  }
+
+  .timer-display.medium {
+    font-size: 20px;
+  }
+
+  .tooltip-text {
+    max-width: 320px;
+    width: calc(100vw - 40px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    font-size: 11px;
+  }
+
+  .tooltip-text::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .btn {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 12px;
+  }
+
+  .section {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .timer-display {
+    font-size: 2.3em;
+  }
+
+  .timer-display.large {
+    font-size: 3.8em;
+  }
+
+  .timer-display.medium {
+    font-size: 18px;
+  }
+
+  textarea {
+    min-height: 100px;
+    padding: 10px;
+    font-size: 12px;
   }
 
   .tooltip-text {
     max-width: 280px;
-    left: 0;
-    transform: translateY(-100%);
+    width: calc(100vw - 30px);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  .section {
+    padding: 8px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+
+  .timer-display {
+    font-size: 2em;
+  }
+
+  .timer-display.large {
+    font-size: 3.2em;
+  }
+
+  .timer-display.medium {
+    font-size: 16px;
+  }
+
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  textarea {
+    min-height: 80px;
+    padding: 8px;
     font-size: 11px;
+  }
+
+  .tooltip-text {
+    max-width: 260px;
+    width: calc(100vw - 20px);
+    left: 10px;
+    transform: translateY(-100%);
+    font-size: 10px;
   }
 
   .tooltip-text::after {
     left: 20px;
     transform: none;
+  }
+
+  .blocklist-item {
+    margin-bottom: 10px;
+  }
+
+  .blocklist-item label {
+    font-size: 14px;
+  }
+
+  .slider-labels {
+    font-size: 10px;
   }
 }
 

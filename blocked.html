@@ -40,14 +40,15 @@
         }
 
         .blob-icon {
-            width: 480px;
-            height: 480px;
+            width: 400px;
+            height: 400px;
             animation: rotate 60s linear infinite;
             display: block;
             margin: 0 auto;
             transform-origin: center;
             position: relative;
-            left: -60px;
+            max-width: calc(100vw - 40px);
+            max-height: calc(100vh - 400px);
         }
 
         @keyframes rotate {
@@ -125,6 +126,100 @@
 
         .back-button:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 1200px) {
+            .blob-icon {
+                width: 360px;
+                height: 360px;
+                left: -45px;
+                max-height: calc(100vh - 350px);
+            }
+
+            .time-remaining {
+                font-size: 4em;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .blob-icon {
+                width: 280px;
+                height: 280px;
+                left: -35px;
+                max-height: calc(100vh - 300px);
+            }
+
+            .time-remaining {
+                font-size: 3.5em;
+            }
+
+            .message {
+                font-size: 1.1em;
+                margin-top: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+
+            .blob-icon {
+                width: 240px;
+                height: 240px;
+                left: -30px;
+                max-height: calc(100vh - 280px);
+            }
+
+            .time-remaining {
+                font-size: 3em;
+            }
+
+            .message {
+                font-size: 1em;
+                margin-top: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .blob-icon {
+                width: 200px;
+                height: 200px;
+                left: -25px;
+                max-height: calc(100vh - 250px);
+            }
+
+            .time-remaining {
+                font-size: 2.5em;
+            }
+
+            .message {
+                font-size: 0.9em;
+                margin-top: 20px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .blob-icon {
+                width: 160px;
+                height: 160px;
+                left: -20px;
+                max-height: calc(100vh - 220px);
+            }
+
+            .time-remaining {
+                font-size: 2em;
+            }
+
+            .message {
+                font-size: 0.85em;
+                margin-top: 15px;
+            }
         }
     </style>
 </head>
