@@ -88,6 +88,84 @@
     .options-card .section:last-child {
       margin-bottom: 0;
     }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 1px solid #333;
+    }
+
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .footer-icon-github {
+      height: 30px;
+      width: 30px;
+    }
+
+    .footer-icon-coffee {
+      height: 40px !important;
+      width: 144px !important;
+    }
+
+    .footer-text {
+      font-size: 14px;
+      color: white;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .options-card {
+        padding: 32px 24px;
+      }
+
+      .footer {
+        margin-top: 32px;
+      }
+
+      .footer-links {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .footer-icon-coffee {
+        height: 32px !important;
+        width: 115px !important;
+      }
+
+      .footer-text {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px;
+      }
+
+      .options-card {
+        padding: 24px 16px;
+      }
+
+      .footer {
+        margin-top: 24px;
+        padding-top: 16px;
+      }
+
+      .footer-icon-coffee {
+        height: 28px !important;
+        width: 100px !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -172,12 +250,12 @@
     </div>
   </div>
 
-  <div style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); text-align: center;">
-    <div style="display: flex; align-items: center; gap: 15px; justify-content: center; margin-bottom: 8px;">
-      <a href="https://github.com/jsattler/zerodistraction" target="_blank"><img src="../icons/github-mark.svg" alt="GitHub" style="height: 30px; width: 30px;" ></a>
-      <a href="https://www.buymeacoffee.com/jsattler" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 144px !important;" ></a>
+  <div class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/jsattler/zerodistraction" target="_blank"><img src="../icons/github-mark.svg" alt="GitHub" class="footer-icon-github" ></a>
+      <a href="https://www.buymeacoffee.com/jsattler" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" class="footer-icon-coffee" ></a>
     </div>
-    <div style="font-size: 14px; color: white;">Made with ❤️ in 🇪🇺</div>
+    <div class="footer-text">Made with ❤️ in 🇪🇺</div>
   </div>
 
   <script src="../shared/pattern-matcher.js"></script>
