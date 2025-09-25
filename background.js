@@ -89,6 +89,21 @@ browser.runtime.onStartup.addListener(() => {
 
 loadBlocklists();
 
+// Update badge based on timer status
+async function updateBadge() {
+  const status = await Timer.getStatus();
+  if (status.isActive) {
+    browser.browserAction.setBadgeText({ text: "✅" });
+    browser.browserAction.setBadgeBackgroundColor({ color: "#22c55e" }); // Green
+  } else {
+    // Clear badge when inactive
+    browser.browserAction.setBadgeText({ text: "" });
+  }
+}
+
+// Initialize badge on startup
+updateBadge();
+
 // Listen for storage changes to notify content scripts
 browser.storage.onChanged.addListener(async (changes, areaName) => {
   if (areaName === 'local' && changes['zerodistraction.options']) {
@@ -107,17 +122,21 @@ browser.storage.onChanged.addListener(async (changes, areaName) => {
 
   if (areaName === 'local' && changes['zerodistraction.settings']) {
     const newSettings = changes['zerodistraction.settings'].newValue;
+
+    // Update badge when timer status changes
+    updateBadge();
+
     try {
       const tabs = await browser.tabs.query({});
       if (newSettings && newSettings.enabled) {
         // Timer started
         tabs.forEach(tab => {
-          browser.tabs.sendMessage(tab.id, { action: 'timerStarted' }).catch(() => {});
+          browser.tabs.sendMessage(tab.id, { action: 'timerStarted' }).catch(() => { });
         });
       } else {
         // Timer stopped
         tabs.forEach(tab => {
-          browser.tabs.sendMessage(tab.id, { action: 'timerStopped' }).catch(() => {});
+          browser.tabs.sendMessage(tab.id, { action: 'timerStopped' }).catch(() => { });
         });
       }
     } catch (error) {
