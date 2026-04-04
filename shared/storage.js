@@ -25,6 +25,20 @@ const Storage = {
     additionalUrls: ''
   },
 
+  DEFAULT_SCHEDULE: {
+    enabled: false,
+    schedulePausedUntil: null,  // timestamp: schedule paused until this time (STOP button)
+    days: {
+      0: [],  // Sunday    - array of { start: "HH:MM", end: "HH:MM" }
+      1: [],  // Monday
+      2: [],  // Tuesday
+      3: [],  // Wednesday
+      4: [],  // Thursday
+      5: [],  // Friday
+      6: []   // Saturday
+    }
+  },
+
   // Load timer settings from local storage
   async loadTimerSettings() {
     try {
@@ -115,6 +129,38 @@ const Storage = {
     options.additionalUrls = existing.join('\n');
     await this.saveUserOptions(options);
     return { added: true, duplicate: false };
+  },
+
+  // Load weekly schedule from local storage
+  async loadSchedule() {
+    try {
+      const result = await browser.storage.local.get(['zerodistraction.schedule']);
+      const storedSchedule = result && result['zerodistraction.schedule'];
+      return storedSchedule ? { ...this.DEFAULT_SCHEDULE, ...storedSchedule } : { ...this.DEFAULT_SCHEDULE };
+    } catch (error) {
+      console.error('Error loading schedule:', error);
+      return { ...this.DEFAULT_SCHEDULE };
+    }
+  },
+
+  // Save weekly schedule to local storage
+  async saveSchedule(schedule) {
+    try {
+      await browser.storage.local.set({ 'zerodistraction.schedule': schedule });
+    } catch (error) {
+      console.error('Error saving schedule:', error);
+      throw error;
+    }
+  },
+
+  // Listen for schedule changes
+  onScheduleChanged(callback) {
+    browser.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName === 'local' && changes['zerodistraction.schedule']) {
+        const newValue = changes['zerodistraction.schedule'].newValue || { ...this.DEFAULT_SCHEDULE };
+        callback(newValue);
+      }
+    });
   },
 
   // Listen for timer settings changes
