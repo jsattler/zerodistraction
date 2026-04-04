@@ -1,6 +1,5 @@
 const Timer = {
   timerInterval: null,
-  isRunning: false,
   onTimerUpdate: null,
   onTimerExpired: null,
 
@@ -12,7 +11,6 @@ const Timer = {
     settings.duration = durationMinutes;
 
     await Storage.saveTimerSettings(settings);
-    this.isRunning = true;
 
     return settings;
   },
@@ -24,14 +22,7 @@ const Timer = {
     settings.startTime = null;
 
     await Storage.saveTimerSettings(settings);
-    this.isRunning = false;
 
-    if (this.timerInterval) {
-      clearInterval(this.timerInterval);
-      this.timerInterval = null;
-    }
-
-    // Stop any ongoing updates
     this.stopUpdates();
 
     return settings;

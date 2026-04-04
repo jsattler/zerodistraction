@@ -127,35 +127,8 @@ const PatternMatcher = {
     return `${path}*`;
   },
 
-  globMatch(pattern, url) {
-    return this.matchPattern(pattern, url);
-  },
-
   matchesAnyPattern(url, patterns) {
     return patterns.some(pattern => this.matchPattern(pattern, url));
-  },
-
-  isValidUrlPattern(pattern) {
-    if (!pattern || typeof pattern !== 'string') return false;
-
-    pattern = pattern.trim();
-    if (pattern.length === 0) return false;
-
-    try {
-      const config = this.parseSimplifiedPattern(pattern);
-      return config !== null;
-    } catch (error) {
-      return false;
-    }
-  },
-
-  parsePatterns(input) {
-    if (!input || typeof input !== 'string') return [];
-
-    return input
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => this.isValidUrlPattern(line));
   }
 };
 

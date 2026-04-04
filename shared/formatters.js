@@ -14,11 +14,6 @@ const Formatters = {
     const remainingMinutes = minutes % 60;
     if (remainingMinutes === 0) return `${hours}h`;
     return `${hours}h ${remainingMinutes}m`;
-  },
-
-  calculateProgress(elapsed, total) {
-    if (!total || total <= 0) return 0;
-    return Math.min(100, Math.max(0, (elapsed / total) * 100));
   }
 };
 

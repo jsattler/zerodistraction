@@ -16,7 +16,6 @@
   <a href="#contributing">Contributing</a>
 </p>
 
-
 ## Why ZeroDistraction?
 
 You sit down to work on something important.
@@ -34,11 +33,11 @@ It's about creating intentional breaks from distraction when you need to get thi
 
 ![ZeroDistraction howto](screenshots/zerodistraction-screencapture.gif)
 
-* Select a duration, press *Start* and get things done
-* Ships with categorized presets to block (social media, news, entertainment)
-* Blocked sites show a simple countdown instead of their content
-* Configure exceptions of URLs that remain accessible even during focus sessions
-* Configure additional URLs to block that are not yet part of the presets
+- Select a duration, press _Start_ and get things done
+- Ships with categorized presets to block (social media, news, entertainment)
+- Blocked sites show a simple countdown instead of their content
+- Configure exceptions of URLs that remain accessible even during focus sessions
+- Configure additional URLs to block that are not yet part of the presets
 
 ## Installation
 
@@ -46,54 +45,50 @@ The easiest way is to [navigate to the extension page on addons.mozilla.org and 
 
 Alternatively, you can downlaod and manually install the extension.
 
-* [Navigate to the Releases.](https://github.com/jsattler/zerodistraction/releases)
-* In the Release Assets, download the `zerodistraction-extension.zip`.
-* [Follow the instructions to manually install an extension.](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing)
+- [Navigate to the Releases.](https://github.com/jsattler/zerodistraction/releases)
+- In the Release Assets, download the `zerodistraction-extension.zip`.
+- [Follow the instructions to manually install an extension.](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension#installing)
 
 ## URL Pattern Matching
 
 ZeroDistraction uses simplified patterns based on the [URLPatternAPI](https://developer.mozilla.org/en-US/docs/Web/API/URL_Pattern_API)
+
 - if you don't specify the scheme, subdomain or path, it matches all variants.
 
-
-| Pattern | Matches |
-|---------|--------|
-| `youtube.com` | All YouTube URLs (any subdomain, scheme, path) |
-| `https://youtube.com` | Only HTTPS YouTube |
-| `www.youtube.com` | Only www subdomain |
-| `youtube.com/shorts` | YouTube Shorts on any subdomain |
+| Pattern               | Matches                                        |
+| --------------------- | ---------------------------------------------- |
+| `youtube.com`         | All YouTube URLs (any subdomain, scheme, path) |
+| `https://youtube.com` | Only HTTPS YouTube                             |
+| `www.youtube.com`     | Only www subdomain                             |
+| `youtube.com/shorts`  | YouTube Shorts on any subdomain                |
 
 **Exceptions override blocklists:**
+
 - Blocklist: `facebook.com` (blocks all Facebook)
 - Exception: `work.facebook.com` (allows work Facebook)
 - Result: `work.facebook.com` accessible, `www.facebook.com` blocked
 
 ## Similar Extensions
 
-* [**LeechBlockNG**](https://addons.mozilla.org/en-US/firefox/addon/leechblock-ng/): Very mature, feature-rich and customizable extension.
-  * **What kept me from using it?** I wanted something simpler, cleaner and without the need for extensive configuration.
-  I don't want to bother reading through long documentation and spend half a day just to get started.
-  I just want to select a time period and get started - easy as that.
+- [**LeechBlockNG**](https://addons.mozilla.org/en-US/firefox/addon/leechblock-ng/): Very mature, feature-rich and customizable extension.
+  - **What kept me from using it?** I wanted something simpler, cleaner and without the need for extensive configuration.
+    I don't want to bother reading through long documentation and spend half a day just to get started.
+    I just want to select a time period and get started - easy as that.
 
 ## Privacy and Data Protection
 
 ZeroDistraction respects your privacy and protects your data:
 
 **Why does the extension need permissions?**
-* **Access to web requests**: Required to detect and block the URLs from the block lists
-* **Storage permission**: Stores your settings (timer duration, blocklists, allowlist) locally on your device only
+
+- **Access to web requests**: Required to detect and block the URLs from the block lists
+- **Storage permission**: Stores your settings (timer duration, blocklists, allowlist) locally on your device only
 
 **Your data stays private:**
-* **Zero data collection**: We don't collect, store, or analyze any of your browsing data
-* **No external connections**: The extension never sends any information to external servers or third parties
-* **Local storage only**: All your settings and preferences remain on your device
 
-## Disclaimer
-
-I'm not an expert in web technologies and heavily relied on Claude to create this extension.
-There are no tests yet and probably a lot of bugs. 
-I just wanted something working, in a short period of time.
-Next step is to make it nice and clean and add some tests.
+- **Zero data collection**: We don't collect, store, or analyze any of your browsing data
+- **No external connections**: The extension never sends any information to external servers or third parties
+- **Local storage only**: All your settings and preferences remain on your device
 
 ## Contributing
 
