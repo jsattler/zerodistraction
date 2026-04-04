@@ -19,6 +19,7 @@
       "shared/misc-utils.js",
       "shared/storage.js",
       "shared/timer.js",
+      "shared/schedule.js",
       "background.js"
     ],
     "persistent": true

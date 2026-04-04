@@ -170,82 +170,161 @@
 </head>
 <body>
   <div class="options-card">
-    <div class="section">
-      <div class="section-title">Distraction Presets</div>
-      <div class="blocklist-item">
-        <input type="checkbox" id="social-checkbox" checked>
-        <label for="social-checkbox">Social Media</label>
-        <a href="../blocklists/social.json" target="_blank" class="external-link" title="View Social Media blocklist">View Preset</a>
+    <!-- Tab bar -->
+    <div class="tabs" role="tablist">
+      <button class="tab active" role="tab" aria-selected="true" data-tab="general">General</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="schedule">Schedule</button>
+    </div>
+
+    <!-- General tab panel -->
+    <div class="tab-panel active" id="tab-general" role="tabpanel">
+      <div class="section">
+        <div class="section-title">Distraction Presets</div>
+        <div class="blocklist-item">
+          <input type="checkbox" id="social-checkbox" checked>
+          <label for="social-checkbox">Social Media</label>
+          <a href="../blocklists/social.json" target="_blank" class="external-link" title="View Social Media blocklist">View Preset</a>
+        </div>
+        <div class="blocklist-item">
+          <input type="checkbox" id="news-checkbox" checked>
+          <label for="news-checkbox">News Sites</label>
+          <a href="../blocklists/news.json" target="_blank" class="external-link" title="View News Sites blocklist">View Preset</a>
+        </div>
+        <div class="blocklist-item">
+          <input type="checkbox" id="entertainment-checkbox" checked>
+          <label for="entertainment-checkbox">Entertainment</label>
+          <a href="../blocklists/entertainment.json" target="_blank" class="external-link" title="View Entertainment blocklist">View Preset</a>
+        </div>
+        <div style="text-align: center; margin-top: 16px; font-size: 13px; color: #999;">
+          Missing a website in the presets? <a href="https://github.com/jsattler/zerodistraction" target="_blank" style="color: #66aaff; text-decoration: none;">Open a pull request on GitHub.</a>
+        </div>
       </div>
-      <div class="blocklist-item">
-        <input type="checkbox" id="news-checkbox" checked>
-        <label for="news-checkbox">News Sites</label>
-        <a href="../blocklists/news.json" target="_blank" class="external-link" title="View News Sites blocklist">View Preset</a>
+
+      <div class="section">
+        <div class="section-title-with-tooltip">
+          Additional URLs
+          <div class="tooltip-container">
+            <button class="tooltip-btn" type="button">?</button>
+            <div class="tooltip-text">
+              Enter URL patterns (one per line) that should be blocked in addition to the presets above.
+              Simply enter domains, paths, or full URLs. Examples: reddit.com, youtube.com/shorts, https://distracting-site.com
+            </div>
+          </div>
+        </div>
+        <textarea
+          class="exceptions-input"
+          id="additional-urls-input"
+          placeholder="reddit.com&#10;youtube.com/shorts&#10;https://distracting-site.com/path"
+        ></textarea>
       </div>
-      <div class="blocklist-item">
-        <input type="checkbox" id="entertainment-checkbox" checked>
-        <label for="entertainment-checkbox">Entertainment</label>
-        <a href="../blocklists/entertainment.json" target="_blank" class="external-link" title="View Entertainment blocklist">View Preset</a>
+
+      <div class="section">
+        <div class="section-title-with-tooltip">
+          Exceptions
+          <div class="tooltip-container">
+            <button class="tooltip-btn" type="button">?</button>
+            <div class="tooltip-text">
+              Enter URL patterns (one per line) that should not be blocked, even if they match the blocklists above.
+              Simply enter domains, paths, or full URLs. Examples: work.facebook.com, news.ycombinator.com/jobs, work-domain.com
+            </div>
+          </div>
+        </div>
+        <textarea
+          class="exceptions-input"
+          id="exceptions-input"
+          placeholder="work.facebook.com&#10;news.ycombinator.com/jobs&#10;work-domain.com"
+        ></textarea>
       </div>
-      <div style="text-align: center; margin-top: 16px; font-size: 13px; color: #999;">
-        Missing a website in the presets? <a href="https://github.com/jsattler/zerodistraction" target="_blank" style="color: #66aaff; text-decoration: none;">Open a pull request on GitHub.</a>
+
+      <div class="section timer-section">
+        <div class="timer-control" id="timer-control">
+          <div class="timer-display" id="timer-display">00:30:00</div>
+          <div class="slider-container" style="display: none;">
+            <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
+            <div class="slider-labels">
+              <span>0m</span>
+              <span>2h</span>
+              <span>4h</span>
+              <span>6h</span>
+              <span>8h</span>
+            </div>
+          </div>
+          <div class="progress-bar" id="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
+          <button class="stop-btn btn btn-danger" id="stop-btn">STOP, I NEED DOPAMINE!</button>
+        </div>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-title-with-tooltip">
-        Additional URLs
-        <div class="tooltip-container">
-          <button class="tooltip-btn" type="button">?</button>
-          <div class="tooltip-text">
-            Enter URL patterns (one per line) that should be blocked in addition to the presets above.
-            Simply enter domains, paths, or full URLs. Examples: reddit.com, youtube.com/shorts, https://distracting-site.com
-          </div>
+    <!-- Schedule tab panel -->
+    <div class="tab-panel" id="tab-schedule" role="tabpanel">
+      <div class="section schedule-section">
+        <div class="schedule-toggle">
+          <input type="checkbox" id="schedule-enabled" class="schedule-enabled-checkbox">
+          <label for="schedule-enabled">Enable Weekly Schedule</label>
         </div>
-      </div>
-      <textarea
-        class="exceptions-input"
-        id="additional-urls-input"
-        placeholder="reddit.com&#10;youtube.com/shorts&#10;https://distracting-site.com/path"
-      ></textarea>
-    </div>
 
-    <div class="section">
-      <div class="section-title-with-tooltip">
-        Exceptions
-        <div class="tooltip-container">
-          <button class="tooltip-btn" type="button">?</button>
-          <div class="tooltip-text">
-            Enter URL patterns (one per line) that should not be blocked, even if they match the blocklists above.
-            Simply enter domains, paths, or full URLs. Examples: work.facebook.com, news.ycombinator.com/jobs, work-domain.com
-          </div>
-        </div>
-      </div>
-      <textarea
-        class="exceptions-input"
-        id="exceptions-input"
-        placeholder="work.facebook.com&#10;news.ycombinator.com/jobs&#10;work-domain.com"
-      ></textarea>
-    </div>
+        <p class="schedule-description">Set recurring time windows when blocking is automatically active. Add one or more time slots per day.</p>
 
-    <div class="section timer-section">
-      <div class="timer-control" id="timer-control">
-        <div class="timer-display" id="timer-display">00:30:00</div>
-        <div class="slider-container" style="display: none;">
-          <input type="range" class="duration-slider" id="duration-slider" min="0" max="480" step="15" value="30">
-          <div class="slider-labels">
-            <span>0m</span>
-            <span>2h</span>
-            <span>4h</span>
-            <span>6h</span>
-            <span>8h</span>
+        <div class="schedule-days" id="schedule-days">
+          <div class="schedule-day" data-day="1">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Monday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="1"></div>
+            <button class="schedule-add-slot btn-text" data-day="1">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="2">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Tuesday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="2"></div>
+            <button class="schedule-add-slot btn-text" data-day="2">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="3">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Wednesday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="3"></div>
+            <button class="schedule-add-slot btn-text" data-day="3">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="4">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Thursday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="4"></div>
+            <button class="schedule-add-slot btn-text" data-day="4">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="5">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Friday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="5"></div>
+            <button class="schedule-add-slot btn-text" data-day="5">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="6">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Saturday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="6"></div>
+            <button class="schedule-add-slot btn-text" data-day="6">+ Add slot</button>
+          </div>
+
+          <div class="schedule-day" data-day="0">
+            <div class="schedule-day-header">
+              <span class="schedule-day-name">Sunday</span>
+            </div>
+            <div class="schedule-day-slots" data-day="0"></div>
+            <button class="schedule-add-slot btn-text" data-day="0">+ Add slot</button>
           </div>
         </div>
-        <div class="progress-bar" id="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-        <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
-        <button class="stop-btn btn btn-danger" id="stop-btn">STOP, I NEED DOPAMINE!</button>
       </div>
     </div>
   </div>
@@ -264,6 +343,7 @@
   <script src="../shared/misc-utils.js"></script>
   <script src="../shared/storage.js"></script>
   <script src="../shared/timer.js"></script>
+  <script src="../shared/schedule.js"></script>
   <script src="../options/options.js"></script>
 </body>
 </html>

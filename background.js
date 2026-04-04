@@ -26,8 +26,14 @@ async function loadBlocklists() {
 }
 
 async function isBlockingActive() {
-  const status = await Timer.getStatus();
-  return status.isActive;
+  const timerStatus = await Timer.getStatus();
+  if (timerStatus.isActive) return true;
+
+  // Check weekly schedule
+  const isScheduled = await Schedule.isInScheduledWindow();
+  if (isScheduled) return true;
+
+  return false;
 }
 
 async function shouldBlockUrl(url) {
@@ -89,14 +95,21 @@ browser.runtime.onStartup.addListener(() => {
 
 loadBlocklists();
 
-// Update badge based on timer status
+// Update badge based on timer or schedule status
 async function updateBadge() {
-  const status = await Timer.getStatus();
-  if (status.isActive) {
+  const timerStatus = await Timer.getStatus();
+  if (timerStatus.isActive) {
     browser.browserAction.setBadgeText({ text: "✅" });
-    browser.browserAction.setBadgeBackgroundColor({ color: "#22c55e" }); // Green
+    browser.browserAction.setBadgeBackgroundColor({ color: "#22c55e" });
+    return;
+  }
+
+  // Check schedule
+  const scheduleActive = await Schedule.isInScheduledWindow();
+  if (scheduleActive) {
+    browser.browserAction.setBadgeText({ text: "✅" });
+    browser.browserAction.setBadgeBackgroundColor({ color: "#22c55e" });
   } else {
-    // Clear badge when inactive
     browser.browserAction.setBadgeText({ text: "" });
   }
 }
@@ -156,6 +169,61 @@ browser.storage.onChanged.addListener(async (changes, areaName) => {
       console.error('Error sending timer status message:', error);
     }
   }
+});
+
+// Schedule polling: check every 30 seconds if schedule state changed
+let schedulePollingInterval = null;
+let lastScheduleActive = false;
+
+async function checkScheduleState() {
+  const isActive = await Schedule.isInScheduledWindow();
+
+  if (isActive !== lastScheduleActive) {
+    lastScheduleActive = isActive;
+    updateBadge();
+
+    // Notify all tabs
+    try {
+      const tabs = await browser.tabs.query({});
+      const action = isActive ? 'timerStarted' : 'timerStopped';
+      tabs.forEach(tab => {
+        browser.tabs.sendMessage(tab.id, { action }).catch(() => {});
+      });
+    } catch (error) {
+      console.error('Error notifying tabs of schedule change:', error);
+    }
+  }
+}
+
+function startSchedulePolling() {
+  if (schedulePollingInterval) return;
+  schedulePollingInterval = setInterval(checkScheduleState, 30000);
+  checkScheduleState(); // Run immediately
+}
+
+function stopSchedulePolling() {
+  if (schedulePollingInterval) {
+    clearInterval(schedulePollingInterval);
+    schedulePollingInterval = null;
+  }
+}
+
+// Start schedule polling if schedule is enabled
+Storage.loadSchedule().then(schedule => {
+  if (schedule && schedule.enabled) {
+    startSchedulePolling();
+  }
+});
+
+// Listen for schedule changes
+Storage.onScheduleChanged((newSchedule) => {
+  if (newSchedule && newSchedule.enabled) {
+    startSchedulePolling();
+  } else {
+    stopSchedulePolling();
+    lastScheduleActive = false;
+  }
+  updateBadge();
 });
 
 // Handle messages from content scripts
