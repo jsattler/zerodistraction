@@ -99,11 +99,39 @@ const Storage = {
     return timerSettings;
   },
 
-  // Listen for storage changes
+  // Add a domain to the additional URLs blocklist
+  async addAdditionalUrl(domain) {
+    const options = await this.loadUserOptions();
+    const existing = (options.additionalUrls || '')
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    if (existing.includes(domain)) {
+      return { added: false, duplicate: true };
+    }
+
+    existing.push(domain);
+    options.additionalUrls = existing.join('\n');
+    await this.saveUserOptions(options);
+    return { added: true, duplicate: false };
+  },
+
+  // Listen for timer settings changes
   onTimerSettingsChanged(callback) {
     browser.storage.onChanged.addListener((changes, areaName) => {
       if (areaName === 'local' && changes['zerodistraction.settings']) {
         const newValue = changes['zerodistraction.settings'].newValue || { ...this.DEFAULT_SETTINGS };
+        callback(newValue);
+      }
+    });
+  },
+
+  // Listen for user options changes (blocklists, exceptions, additional URLs)
+  onUserOptionsChanged(callback) {
+    browser.storage.onChanged.addListener((changes, areaName) => {
+      if (areaName === 'local' && changes['zerodistraction.options']) {
+        const newValue = changes['zerodistraction.options'].newValue || { ...this.DEFAULT_OPTIONS };
         callback(newValue);
       }
     });

@@ -167,3 +167,41 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true; // Keep message channel open for async response
   }
 });
+
+// Context menu: "Block this site"
+browser.menus.create({
+  id: 'block-current-site',
+  title: 'Add to blocklist',
+  contexts: ['page'],
+  icons: {
+    '16': 'icons/blob.svg'
+  }
+});
+
+browser.menus.onClicked.addListener(async (info, tab) => {
+  if (info.menuItemId !== 'block-current-site') return;
+
+  if (!tab || !tab.url || !tab.url.startsWith('http')) return;
+
+  try {
+    const url = new URL(tab.url);
+    let domain = url.hostname;
+
+    // Strip www. prefix so the pattern matches all subdomains
+    if (domain.startsWith('www.')) {
+      domain = domain.slice(4);
+    }
+
+    const result = await Storage.addAdditionalUrl(domain);
+
+    // Flash badge feedback: "+" for newly added, "=" for already blocked
+    browser.browserAction.setBadgeText({ text: result.added ? '+' : '=' });
+    browser.browserAction.setBadgeBackgroundColor({ color: result.added ? '#22c55e' : '#f59e0b' });
+
+    setTimeout(() => {
+      updateBadge();
+    }, 2000);
+  } catch (error) {
+    console.error('Error blocking site from context menu:', error);
+  }
+});

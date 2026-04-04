@@ -8,6 +8,7 @@
     "webRequestBlocking",
     "storage",
     "activeTab",
+    "menus",
     "<all_urls>"
   ],
   "background": {
