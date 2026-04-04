@@ -104,6 +104,15 @@ async function updateBadge() {
 // Initialize badge on startup
 updateBadge();
 
+// If timer is already active on startup, start background polling for expiration
+Timer.getStatus().then(status => {
+  if (status.isActive) {
+    Timer.startUpdates(updateBadge, () => {
+      updateBadge();
+    });
+  }
+});
+
 // Listen for storage changes to notify content scripts
 browser.storage.onChanged.addListener(async (changes, areaName) => {
   if (areaName === 'local' && changes['zerodistraction.options']) {
@@ -129,12 +138,16 @@ browser.storage.onChanged.addListener(async (changes, areaName) => {
     try {
       const tabs = await browser.tabs.query({});
       if (newSettings && newSettings.enabled) {
-        // Timer started
+        // Timer started — begin background polling for expiration
+        Timer.startUpdates(updateBadge, () => {
+          updateBadge();
+        });
         tabs.forEach(tab => {
           browser.tabs.sendMessage(tab.id, { action: 'timerStarted' }).catch(() => { });
         });
       } else {
-        // Timer stopped
+        // Timer stopped — stop background polling
+        Timer.stopUpdates();
         tabs.forEach(tab => {
           browser.tabs.sendMessage(tab.id, { action: 'timerStopped' }).catch(() => { });
         });
