@@ -7,13 +7,6 @@ const Schedule = {
     return hours * 60 + minutes;
   },
 
-  // Format minutes since midnight back to "HH:MM"
-  formatTime(minutesSinceMidnight) {
-    const hours = Math.floor(minutesSinceMidnight / 60);
-    const minutes = minutesSinceMidnight % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-  },
-
   // Check if a given time (minutes since midnight) falls within a slot
   isInSlot(currentMinutes, slot) {
     const start = this.parseTime(slot.start);
@@ -65,42 +58,6 @@ const Schedule = {
     }
 
     return this.getActiveSlot(schedule) !== null;
-  },
-
-  // Get time remaining in the current window (ms), or 0 if not in a window
-  async getTimeRemainingInWindow() {
-    const schedule = await Storage.loadSchedule();
-    if (!schedule || !schedule.enabled) return 0;
-
-    const now = new Date();
-    const slot = this.getActiveSlot(schedule, now);
-    if (!slot) return 0;
-
-    const endMinutes = this.parseTime(slot.end);
-    const currentMinutes = now.getHours() * 60 + now.getMinutes();
-    const currentSeconds = now.getSeconds();
-
-    // Remaining time in milliseconds
-    const remainingMinutes = endMinutes - currentMinutes;
-    const remainingMs = (remainingMinutes * 60 - currentSeconds) * 1000;
-
-    return Math.max(0, remainingMs);
-  },
-
-  // Get the current window's end time as a Date object, or null
-  async getCurrentWindowEnd() {
-    const schedule = await Storage.loadSchedule();
-    if (!schedule || !schedule.enabled) return null;
-
-    const now = new Date();
-    const slot = this.getActiveSlot(schedule, now);
-    if (!slot) return null;
-
-    const endMinutes = this.parseTime(slot.end);
-    const endDate = new Date(now);
-    endDate.setHours(Math.floor(endMinutes / 60), endMinutes % 60, 0, 0);
-
-    return endDate;
   },
 
   // Get schedule status (similar shape to Timer.getStatus for popup reuse)
@@ -197,12 +154,7 @@ const Schedule = {
   },
 
   // Day name helpers
-  DAY_NAMES: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   DAY_NAMES_SHORT: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-
-  getDayName(dayIndex) {
-    return this.DAY_NAMES[dayIndex];
-  },
 
   getDayNameShort(dayIndex) {
     return this.DAY_NAMES_SHORT[dayIndex];

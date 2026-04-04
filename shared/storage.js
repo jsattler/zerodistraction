@@ -1,8 +1,5 @@
 // Centralized storage interface for DistractionBlock extension
 
-// Browser API compatibility
-const browserAPI = (typeof browser !== 'undefined' && browser) || (typeof chrome !== 'undefined' && chrome);
-
 const Storage = {
   // Default settings structure
   DEFAULT_SETTINGS: {
@@ -13,8 +10,7 @@ const Storage = {
       social: true,
       news: true,
       entertainment: true
-    },
-    exceptions: []
+    }
   },
 
   DEFAULT_OPTIONS: {

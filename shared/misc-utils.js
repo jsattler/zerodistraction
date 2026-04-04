@@ -9,14 +9,6 @@ const MiscUtils = {
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
     };
-  },
-
-  clearIntervalSafely(intervalId) {
-    if (intervalId) {
-      clearInterval(intervalId);
-      return null;
-    }
-    return intervalId;
   }
 };
 

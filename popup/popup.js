@@ -131,11 +131,6 @@ async function handleSliderChange() {
   await Storage.saveTimerSettings(settings);
 }
 
-// Debounced function for any heavy operations (if needed in future)
-const handleSliderChangeDebounced = MiscUtils.debounce(async () => {
-  // Reserved for heavy operations that need debouncing
-}, 100);
-
 DomUtils.addEventListener(startStopBtn, 'click', async () => {
   // Only allow starting, stopping is done from options page
   const isActive = await Timer.isActive();
