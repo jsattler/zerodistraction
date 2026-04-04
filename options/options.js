@@ -39,6 +39,24 @@ async function initOptions() {
     }
   });
 
+  // Reactively update UI when user options change externally (e.g. context menu)
+  Storage.onUserOptionsChanged((newOptions) => {
+    const additionalUrlsInput = DomUtils.querySelector('#additional-urls-input');
+    const exceptionsInput = DomUtils.querySelector('#exceptions-input');
+
+    // Only update fields that aren't currently focused (avoid overwriting user input)
+    if (document.activeElement !== additionalUrlsInput) {
+      additionalUrlsInput.value = newOptions.additionalUrls || '';
+    }
+    if (document.activeElement !== exceptionsInput) {
+      exceptionsInput.value = newOptions.exceptions || '';
+    }
+
+    DomUtils.querySelector('#social-checkbox').checked = newOptions.socialEnabled;
+    DomUtils.querySelector('#news-checkbox').checked = newOptions.newsEnabled;
+    DomUtils.querySelector('#entertainment-checkbox').checked = newOptions.entertainmentEnabled;
+  });
+
   DomUtils.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     DomUtils.addEventListener(checkbox, 'change', saveOptions);
   });
