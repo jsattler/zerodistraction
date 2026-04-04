@@ -599,30 +599,90 @@ a:hover {
 .schedule-slot {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-.schedule-time-input {
-  background: #111;
-  border: 1px solid #444;
-  border-radius: 4px;
-  color: white;
-  padding: 6px 8px;
-  font-size: 13px;
+.schedule-slot-label {
+  font-size: 12px;
+  color: #ccc;
   font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  width: 110px;
+  white-space: nowrap;
+  min-width: 100px;
+  text-align: center;
 }
 
-.schedule-time-input:focus {
+.schedule-range-slider {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  min-width: 120px;
+}
+
+.schedule-range-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: #333;
+}
+
+.schedule-range-fill {
+  position: absolute;
+  top: 0;
+  height: 6px;
+  border-radius: 3px;
+  background: white;
+  pointer-events: none;
+}
+
+.schedule-range-slider input[type="range"] {
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  pointer-events: none;
+  margin: 0;
   outline: none;
-  border-color: white;
 }
 
-.schedule-slot-separator {
-  color: #666;
-  font-size: 14px;
-  flex-shrink: 0;
+.schedule-range-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease;
+}
+
+.schedule-range-slider input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.schedule-range-slider input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  pointer-events: auto;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 0.1s ease;
+}
+
+.schedule-range-slider input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
 }
 
 .schedule-remove-slot {
@@ -648,14 +708,10 @@ a:hover {
   background: rgba(220, 38, 38, 0.1);
 }
 
-.schedule-slot-error {
-  font-size: 11px;
-  color: #dc2626;
-  flex-shrink: 0;
-}
-
-.schedule-slot-invalid .schedule-time-input {
-  border-color: #dc2626;
+.schedule-day-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .btn-text {
@@ -670,6 +726,12 @@ a:hover {
 
 .btn-text:hover {
   color: white;
+}
+
+.schedule-pause-btn,
+.schedule-resume-btn {
+  margin-top: 12px;
+  font-weight: bold;
 }
 
 /* Popup schedule status */
@@ -697,14 +759,12 @@ a:hover {
     gap: 6px;
   }
 
-  .schedule-time-input {
-    width: 90px;
-    font-size: 12px;
-    padding: 5px 6px;
+  .schedule-slot-label {
+    font-size: 11px;
+    min-width: 90px;
   }
 
-  .schedule-slot-error {
-    width: 100%;
-    font-size: 10px;
+  .schedule-range-slider {
+    min-width: 80px;
   }
 }

@@ -8,6 +8,7 @@ const startStopBtn = DomUtils.querySelector('#start-stop-btn');
 const durationSlider = DomUtils.querySelector('#duration-slider');
 const optionsLink = DomUtils.querySelector('#options-link');
 const scheduleStatusEl = DomUtils.querySelector('#schedule-status');
+const scheduleResumeBtn = DomUtils.querySelector('#schedule-resume-btn');
 
 function updateTimerDisplay(status = null) {
   if (!status) {
@@ -61,6 +62,7 @@ async function updateUI() {
     Timer.stopUpdates();
     sliderContainer.style.display = 'none';
     startStopBtn.style.display = 'none';
+    scheduleResumeBtn.style.display = 'none';
 
     scheduleStatusEl.style.display = 'block';
     scheduleStatusEl.className = 'schedule-status active';
@@ -71,8 +73,26 @@ async function updateUI() {
     return;
   }
 
+  if (scheduleStatus.isPaused && scheduleStatus.isScheduled) {
+    // Schedule is paused within an active window — show resume option
+    Timer.stopUpdates();
+    stopScheduleUpdates();
+    sliderContainer.style.display = 'none';
+    startStopBtn.style.display = 'none';
+    scheduleStatusEl.style.display = 'block';
+    scheduleStatusEl.className = 'schedule-status';
+    scheduleStatusEl.textContent = 'Schedule paused';
+
+    timerDisplay.textContent = 'Paused';
+    progressFill.style.width = '0%';
+
+    scheduleResumeBtn.style.display = 'block';
+    return;
+  }
+
   // Nothing active — show normal timer UI
   stopScheduleUpdates();
+  scheduleResumeBtn.style.display = 'none';
   sliderContainer.style.display = 'block';
   startStopBtn.style.display = 'block';
   startStopBtn.textContent = 'Start';
@@ -137,6 +157,11 @@ DomUtils.addEventListener(startStopBtn, 'click', async () => {
   if (!isActive) {
     startBlocking();
   }
+});
+
+DomUtils.addEventListener(scheduleResumeBtn, 'click', async () => {
+  await Schedule.resumeFromPause();
+  await updateUI();
 });
 
 DomUtils.addEventListener(durationSlider, 'input', handleSliderChange);
