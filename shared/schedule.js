@@ -153,6 +153,15 @@ const Schedule = {
     await Storage.saveSchedule(schedule);
   },
 
+  // Resume from pause — clear the pause timestamp
+  async resumeFromPause() {
+    const schedule = await Storage.loadSchedule();
+    if (!schedule) return;
+
+    schedule.schedulePausedUntil = null;
+    await Storage.saveSchedule(schedule);
+  },
+
   // Day name helpers
   DAY_NAMES_SHORT: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 

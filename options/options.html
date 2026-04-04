@@ -254,6 +254,8 @@
           </div>
           <button class="start-stop-btn start-btn btn btn-primary stop-btn" id="start-stop-btn" style="display: none;">Start</button>
           <button class="stop-btn btn btn-danger" id="stop-btn">STOP, I NEED DOPAMINE!</button>
+          <button class="btn btn-danger stop-btn schedule-pause-btn" id="schedule-pause-btn" style="display: none;">Pause Schedule</button>
+          <button class="btn btn-primary stop-btn schedule-resume-btn" id="schedule-resume-btn" style="display: none;">Resume Blocking</button>
         </div>
       </div>
     </div>
@@ -282,7 +284,10 @@
               <span class="schedule-day-name">Tuesday</span>
             </div>
             <div class="schedule-day-slots" data-day="2"></div>
-            <button class="schedule-add-slot btn-text" data-day="2">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="2">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="2" data-prev-day="1">Copy Previous Day</button>
+            </div>
           </div>
 
           <div class="schedule-day" data-day="3">
@@ -290,7 +295,10 @@
               <span class="schedule-day-name">Wednesday</span>
             </div>
             <div class="schedule-day-slots" data-day="3"></div>
-            <button class="schedule-add-slot btn-text" data-day="3">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="3">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="3" data-prev-day="2">Copy Previous Day</button>
+            </div>
           </div>
 
           <div class="schedule-day" data-day="4">
@@ -298,7 +306,10 @@
               <span class="schedule-day-name">Thursday</span>
             </div>
             <div class="schedule-day-slots" data-day="4"></div>
-            <button class="schedule-add-slot btn-text" data-day="4">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="4">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="4" data-prev-day="3">Copy Previous Day</button>
+            </div>
           </div>
 
           <div class="schedule-day" data-day="5">
@@ -306,7 +317,10 @@
               <span class="schedule-day-name">Friday</span>
             </div>
             <div class="schedule-day-slots" data-day="5"></div>
-            <button class="schedule-add-slot btn-text" data-day="5">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="5">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="5" data-prev-day="4">Copy Previous Day</button>
+            </div>
           </div>
 
           <div class="schedule-day" data-day="6">
@@ -314,7 +328,10 @@
               <span class="schedule-day-name">Saturday</span>
             </div>
             <div class="schedule-day-slots" data-day="6"></div>
-            <button class="schedule-add-slot btn-text" data-day="6">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="6">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="6" data-prev-day="5">Copy Previous Day</button>
+            </div>
           </div>
 
           <div class="schedule-day" data-day="0">
@@ -322,7 +339,10 @@
               <span class="schedule-day-name">Sunday</span>
             </div>
             <div class="schedule-day-slots" data-day="0"></div>
-            <button class="schedule-add-slot btn-text" data-day="0">+ Add slot</button>
+            <div class="schedule-day-actions">
+              <button class="schedule-add-slot btn-text" data-day="0">+ Add slot</button>
+              <button class="schedule-copy-prev btn-text" data-day="0" data-prev-day="6">Copy Previous Day</button>
+            </div>
           </div>
         </div>
       </div>

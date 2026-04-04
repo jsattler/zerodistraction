@@ -21,6 +21,14 @@ async function initOptions() {
 
   DomUtils.addEventListener(DomUtils.querySelector('#stop-btn'), 'click', stopTimer);
   DomUtils.addEventListener(DomUtils.querySelector('#start-stop-btn'), 'click', startTimer);
+  DomUtils.addEventListener(DomUtils.querySelector('#schedule-pause-btn'), 'click', async () => {
+    await Schedule.pauseUntilWindowEnd();
+    await checkTimerStatus();
+  });
+  DomUtils.addEventListener(DomUtils.querySelector('#schedule-resume-btn'), 'click', async () => {
+    await Schedule.resumeFromPause();
+    await checkTimerStatus();
+  });
   DomUtils.addEventListener(DomUtils.querySelector('#duration-slider'), 'input', () => {
     updateTimerDisplay();
     saveDurationChange();
@@ -31,6 +39,11 @@ async function initOptions() {
     if (status && status.isActive) {
       startTimerDisplay();
     }
+  });
+
+  // Re-check timer area when schedule changes (e.g. pause/resume from popup)
+  Storage.onScheduleChanged(async () => {
+    await checkTimerStatus();
   });
 
   Storage.onTimerSettingsChanged(async (newSettings) => {
@@ -155,40 +168,109 @@ async function saveDurationChange() {
   await Storage.saveTimerSettings(settings);
 }
 
+// ─── Schedule countdown polling for options page ────────────────────
+let optionsScheduleInterval = null;
+
+function startOptionsScheduleUpdates() {
+  if (optionsScheduleInterval) return;
+  optionsScheduleInterval = setInterval(async () => {
+    const scheduleStatus = await Schedule.getStatus();
+    const timerDisplayElement = DomUtils.querySelector('#timer-display');
+    if (scheduleStatus.isActive && scheduleStatus.isScheduled) {
+      timerDisplayElement.textContent = Formatters.formatTimeRemaining(scheduleStatus.timeRemaining);
+    } else {
+      // State changed (window ended or paused externally) — full refresh
+      stopOptionsScheduleUpdates();
+      await checkTimerStatus();
+    }
+  }, 1000);
+}
+
+function stopOptionsScheduleUpdates() {
+  if (optionsScheduleInterval) {
+    clearInterval(optionsScheduleInterval);
+    optionsScheduleInterval = null;
+  }
+}
+
 async function checkTimerStatus() {
   const status = await Timer.getStatus();
   const timerControl = DomUtils.querySelector('#timer-control');
   const sliderContainer = DomUtils.querySelector('.slider-container');
   const startStopBtn = DomUtils.querySelector('#start-stop-btn');
   const stopBtn = DomUtils.querySelector('#stop-btn');
+  const pauseBtn = DomUtils.querySelector('#schedule-pause-btn');
+  const resumeBtn = DomUtils.querySelector('#schedule-resume-btn');
 
   if (status.isActive) {
+    stopOptionsScheduleUpdates();
     timerControl.style.display = 'block';
     sliderContainer.style.display = 'none';
     startStopBtn.style.display = 'none';
     stopBtn.style.display = 'block';
+    pauseBtn.style.display = 'none';
+    resumeBtn.style.display = 'none';
     startTimerDisplay();
-  } else {
+    return;
+  }
+
+  // Check schedule state
+  const scheduleStatus = await Schedule.getStatus();
+
+  if (scheduleStatus.isActive && scheduleStatus.isScheduled) {
+    // Schedule window is active — show pause button and start countdown
     timerControl.style.display = 'block';
-    sliderContainer.style.display = 'block';
-    startStopBtn.style.display = 'block';
+    sliderContainer.style.display = 'none';
+    startStopBtn.style.display = 'none';
     stopBtn.style.display = 'none';
+    pauseBtn.style.display = 'block';
+    resumeBtn.style.display = 'none';
     Timer.stopUpdates();
 
-    // Set default timer display
     const timerDisplayElement = DomUtils.querySelector('#timer-display');
-    const durationSlider = DomUtils.querySelector('#duration-slider');
-    if (durationSlider && durationSlider.value) {
-      const currentSliderValue = parseInt(durationSlider.value);
-      if (!isNaN(currentSliderValue)) {
-        const durationInMs = currentSliderValue * 60 * 1000;
-        timerDisplayElement.textContent = Formatters.formatTimeRemaining(durationInMs);
-      } else {
-        timerDisplayElement.textContent = '00:00:00';
-      }
+    timerDisplayElement.textContent = Formatters.formatTimeRemaining(scheduleStatus.timeRemaining);
+    startOptionsScheduleUpdates();
+    return;
+  }
+
+  if (scheduleStatus.isPaused && scheduleStatus.isScheduled) {
+    stopOptionsScheduleUpdates();
+    timerControl.style.display = 'block';
+    sliderContainer.style.display = 'none';
+    startStopBtn.style.display = 'none';
+    stopBtn.style.display = 'none';
+    pauseBtn.style.display = 'none';
+    resumeBtn.style.display = 'block';
+    Timer.stopUpdates();
+
+    const timerDisplayElement = DomUtils.querySelector('#timer-display');
+    timerDisplayElement.textContent = 'Paused';
+    return;
+  }
+
+  // Nothing active — show normal timer UI
+  stopOptionsScheduleUpdates();
+  timerControl.style.display = 'block';
+  sliderContainer.style.display = 'block';
+  startStopBtn.style.display = 'block';
+  stopBtn.style.display = 'none';
+  pauseBtn.style.display = 'none';
+  resumeBtn.style.display = 'none';
+  Timer.stopUpdates();
+
+  // Set default timer display
+  const timerDisplayElement = DomUtils.querySelector('#timer-display');
+  const durationSlider = DomUtils.querySelector('#duration-slider');
+  if (durationSlider && durationSlider.value) {
+    const currentSliderValue = parseInt(durationSlider.value);
+    if (!isNaN(currentSliderValue)) {
+      const durationInMs = currentSliderValue * 60 * 1000;
+      timerDisplayElement.textContent = Formatters.formatTimeRemaining(durationInMs);
     } else {
       timerDisplayElement.textContent = '00:00:00';
     }
+  } else {
+    timerDisplayElement.textContent = '00:00:00';
   }
 }
 
@@ -252,6 +334,11 @@ async function stopTimer() {
 
 // ─── Weekly Schedule ────────────────────────────────────────────────
 
+// Track whether a slider is being actively dragged to suppress re-renders
+let scheduleSliderActive = false;
+document.addEventListener('mouseup', () => { scheduleSliderActive = false; });
+document.addEventListener('touchend', () => { scheduleSliderActive = false; });
+
 async function initSchedule() {
   const schedule = await Storage.loadSchedule();
 
@@ -282,10 +369,30 @@ async function initSchedule() {
     });
   });
 
-  // Listen for external schedule changes
+  // Copy previous day buttons
+  DomUtils.querySelectorAll('.schedule-copy-prev').forEach(btn => {
+    DomUtils.addEventListener(btn, 'click', async () => {
+      const day = parseInt(btn.dataset.day);
+      const prevDay = parseInt(btn.dataset.prevDay);
+      const schedule = await Storage.loadSchedule();
+
+      const prevSlots = schedule.days[prevDay] || [];
+      if (prevSlots.length === 0) return; // nothing to copy
+
+      // Deep-copy the previous day's slots
+      schedule.days[day] = prevSlots.map(s => ({ start: s.start, end: s.end }));
+
+      await Storage.saveSchedule(schedule);
+      renderDaySlots(day, schedule.days[day]);
+    });
+  });
+
+  // Listen for external schedule changes (skip re-render while dragging a slider)
   Storage.onScheduleChanged((newSchedule) => {
     enabledCheckbox.checked = newSchedule.enabled;
-    renderAllSlots(newSchedule);
+    if (!scheduleSliderActive) {
+      renderAllSlots(newSchedule);
+    }
     updateScheduleDaysVisibility(newSchedule.enabled);
   });
 }
@@ -305,76 +412,137 @@ function renderAllSlots(schedule) {
   }
 }
 
+// Convert minutes since midnight to "HH:MM" string
+function minutesToTimeStr(minutes) {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+}
+
+// Format minutes since midnight to display label (e.g. "9:00 AM", "1:30 PM")
+function minutesToDisplayLabel(minutes) {
+  if (minutes >= 1440) return '12:00 AM'; // midnight (end of day)
+  const h24 = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  const period = h24 < 12 ? 'AM' : 'PM';
+  const h12 = h24 === 0 ? 12 : h24 > 12 ? h24 - 12 : h24;
+  return h12 + ':' + String(m).padStart(2, '0') + ' ' + period;
+}
+
 function renderDaySlots(day, slots) {
   const container = document.querySelector(`.schedule-day-slots[data-day="${day}"]`);
   if (!container) return;
 
   container.innerHTML = '';
 
+  // Range: 0 (00:00) to 1440 (24:00), step 15 min
+  const STEP = 15;
+  const MIN = 0;
+  const MAX = 1440;
+
   slots.forEach((slot, index) => {
+    const startMinutes = Schedule.parseTime(slot.start);
+    const endMinutes = Schedule.parseTime(slot.end);
+
     const slotEl = document.createElement('div');
     slotEl.className = 'schedule-slot';
 
-    const startInput = document.createElement('input');
-    startInput.type = 'time';
-    startInput.className = 'schedule-time-input';
-    startInput.value = slot.start;
+    // Time label
+    const label = document.createElement('span');
+    label.className = 'schedule-slot-label';
+    label.textContent = minutesToDisplayLabel(startMinutes) + ' \u2013 ' + minutesToDisplayLabel(endMinutes);
 
-    const separator = document.createElement('span');
-    separator.className = 'schedule-slot-separator';
-    separator.textContent = '\u2013'; // en-dash
+    // Range slider container
+    const slider = document.createElement('div');
+    slider.className = 'schedule-range-slider';
 
-    const endInput = document.createElement('input');
-    endInput.type = 'time';
-    endInput.className = 'schedule-time-input';
-    endInput.value = slot.end;
+    const track = document.createElement('div');
+    track.className = 'schedule-range-track';
+
+    const fill = document.createElement('div');
+    fill.className = 'schedule-range-fill';
+
+    const startRange = document.createElement('input');
+    startRange.type = 'range';
+    startRange.min = MIN;
+    startRange.max = MAX;
+    startRange.step = STEP;
+    startRange.value = startMinutes;
+
+    const endRange = document.createElement('input');
+    endRange.type = 'range';
+    endRange.min = MIN;
+    endRange.max = MAX;
+    endRange.step = STEP;
+    endRange.value = endMinutes;
+
+    slider.appendChild(track);
+    slider.appendChild(fill);
+    slider.appendChild(startRange);
+    slider.appendChild(endRange);
 
     const removeBtn = document.createElement('button');
     removeBtn.className = 'schedule-remove-slot';
-    removeBtn.textContent = '\u00d7'; // multiplication sign
+    removeBtn.textContent = '\u00d7';
     removeBtn.title = 'Remove slot';
 
-    const errorEl = document.createElement('span');
-    errorEl.className = 'schedule-slot-error';
-
-    slotEl.appendChild(startInput);
-    slotEl.appendChild(separator);
-    slotEl.appendChild(endInput);
+    slotEl.appendChild(label);
+    slotEl.appendChild(slider);
     slotEl.appendChild(removeBtn);
-    slotEl.appendChild(errorEl);
     container.appendChild(slotEl);
 
-    // Validate and show error
-    function validateSlot() {
-      const startMinutes = Schedule.parseTime(startInput.value);
-      const endMinutes = Schedule.parseTime(endInput.value);
-      if (startMinutes >= endMinutes) {
-        errorEl.textContent = 'Start must be before end';
-        slotEl.classList.add('schedule-slot-invalid');
-      } else {
-        errorEl.textContent = '';
-        slotEl.classList.remove('schedule-slot-invalid');
-      }
+    // Update the fill bar position
+    function updateFill() {
+      const s = parseInt(startRange.value);
+      const e = parseInt(endRange.value);
+      const leftPct = (s / MAX) * 100;
+      const rightPct = (e / MAX) * 100;
+      fill.style.left = leftPct + '%';
+      fill.style.width = (rightPct - leftPct) + '%';
     }
 
-    validateSlot();
+    updateFill();
 
+    // Debounced save to storage
     const debouncedSaveSlot = MiscUtils.debounce(async () => {
       const schedule = await Storage.loadSchedule();
       if (schedule.days[day] && schedule.days[day][index]) {
-        schedule.days[day][index].start = startInput.value;
-        schedule.days[day][index].end = endInput.value;
+        schedule.days[day][index].start = minutesToTimeStr(parseInt(startRange.value));
+        schedule.days[day][index].end = minutesToTimeStr(parseInt(endRange.value));
         await Storage.saveSchedule(schedule);
       }
     }, 300);
 
-    startInput.addEventListener('change', () => {
-      validateSlot();
+    // Track active drag to prevent re-renders from destroying the slider
+    [startRange, endRange].forEach(input => {
+      input.addEventListener('mousedown', () => { scheduleSliderActive = true; });
+      input.addEventListener('touchstart', () => { scheduleSliderActive = true; });
+    });
+
+    // Enforce: start thumb cannot exceed end thumb (and vice versa)
+    startRange.addEventListener('input', () => {
+      let s = parseInt(startRange.value);
+      const e = parseInt(endRange.value);
+      if (s >= e) {
+        s = e - STEP;
+        if (s < MIN) s = MIN;
+        startRange.value = s;
+      }
+      label.textContent = minutesToDisplayLabel(s) + ' \u2013 ' + minutesToDisplayLabel(e);
+      updateFill();
       debouncedSaveSlot();
     });
 
-    endInput.addEventListener('change', () => {
-      validateSlot();
+    endRange.addEventListener('input', () => {
+      const s = parseInt(startRange.value);
+      let e = parseInt(endRange.value);
+      if (e <= s) {
+        e = s + STEP;
+        if (e > MAX) e = MAX;
+        endRange.value = e;
+      }
+      label.textContent = minutesToDisplayLabel(s) + ' \u2013 ' + minutesToDisplayLabel(e);
+      updateFill();
       debouncedSaveSlot();
     });
 
